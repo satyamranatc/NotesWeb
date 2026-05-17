@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hibernate & Spring Boot - Clean Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'Fira Code', monospace; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        
+        /* Smooth transitions for all elements */
+        * { transition: background-color 0.2s, border-color 0.2s; }
+        
+        /* Custom scrollbar for main content */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #262626; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #333; }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-gray-300 min-h-screen flex flex-col md:flex-row">
+
+    <!-- Progress Bar -->
+    <div id="progress-bar" class="fixed top-0 left-0 h-0.5 bg-gradient-to-r from-purple-500 to-blue-500 z-[100] transition-all duration-100"></div>
+
+    <!-- Sidebar -->
+    <aside class="w-full md:w-80 bg-[#000] border-r border-gray-800 sticky top-0 h-auto md:h-screen flex flex-col overflow-hidden">
+        <div class="p-8">
+            <div class="flex items-center gap-3 mb-10">
+                <div class="w-10 h-10 bg-purple-600 rounded-xl flex items-center justify-center shadow-lg shadow-purple-900/20">
+                    <i data-lucide="zap" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-white font-bold text-lg tracking-tight leading-none">Hibernate</h1>
+                    <p class="text-gray-600 text-[10px] uppercase tracking-widest mt-1 font-bold">ORM Masterclass</p>
+                </div>
+            </div>
+
+            <!-- Global Links -->
+            <nav class="space-y-1 mb-10">
+                <a href="jdbc.html" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-500 hover:text-white hover:bg-gray-900 rounded-lg transition-all group">
+                    <i data-lucide="database" class="w-4 h-4 group-hover:text-green-500"></i> JDBC Notes
+                </a>
+                <a href="hibernate.html" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white bg-[#111] border border-gray-800 rounded-lg shadow-sm">
+                    <i data-lucide="zap" class="w-4 h-4 text-purple-500"></i> Hibernate Notes
+                </a>
+                <a href="springboot.html" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-500 hover:text-white hover:bg-gray-900 rounded-lg transition-all group">
+                    <i data-lucide="layout" class="w-4 h-4 group-hover:text-green-500"></i> REST API Notes
+                </a>
+            </nav>
+
+            <!-- Table of Contents -->
+            <div class="text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-4 px-4">Sections</div>
+            <nav class="space-y-0.5 overflow-y-auto max-h-[50vh] no-scrollbar px-1" id="toc">
+                <a href="#intro" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">What is Hibernate?</a>
+                <a href="#orm" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">ORM Concept</a>
+                <a href="#architecture" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">Architecture</a>
+                <a href="#crud" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">Core Operations</a>
+                <a href="#spring-boot" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">Spring Boot</a>
+                <a href="#jpa" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">Spring Data JPA</a>
+                <a href="#comparison" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">Comparison</a>
+            </nav>
+        </div>
+        
+        <div class="mt-auto p-8 border-t border-gray-900 bg-[#050505]">
+            <div class="flex items-center justify-between text-gray-600 text-[10px] font-bold uppercase tracking-widest">
+                <span>v2.1.0</span>
+                <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto scroll-smooth">
+        <div class="max-w-4xl mx-auto px-6 py-16 md:py-24">
+            
+            <header class="mb-20">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-purple-500/10 border border-purple-500/20 rounded-full text-purple-400 text-[10px] font-bold uppercase tracking-widest mb-6">
+                    <i data-lucide="book-open" class="w-3 h-3"></i> Tutorial
+                </div>
+                <h1 class="text-4xl md:text-6xl font-black text-white mb-8 tracking-tight">Hibernate & <span class="text-purple-500">Spring Boot</span></h1>
+                <p class="text-xl text-gray-400 leading-relaxed max-w-2xl font-light">Simplify data persistence and enterprise application development with the world's most popular Java frameworks.</p>
+            </header>
+
+            <!-- Sections -->
+            <div class="space-y-32">
+
+                <section id="intro">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="text-purple-500">01.</span> What is Hibernate?
+                    </h2>
+                    <p class="mb-8 text-lg text-gray-400 leading-relaxed">
+                        Hibernate is an <strong class="text-white">ORM (Object Relational Mapping)</strong> framework for Java. It bridges the gap between object-oriented models and relational databases.
+                    </p>
+                    
+                    <div class="bg-[#111] border border-gray-800 rounded-2xl p-8 mb-10 shadow-xl relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 opacity-[0.03]">
+                            <i data-lucide="zap" class="w-32 h-32 text-white"></i>
+                        </div>
+                        <h3 class="text-purple-400 font-bold text-sm uppercase tracking-widest mb-4">The Logic</h3>
+                        <p class="text-xl text-white font-medium mb-0">"Work with Java Objects. Hibernate handles the SQL."</p>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div class="bg-black border border-gray-800 rounded-xl p-6">
+                            <h4 class="text-gray-500 text-[10px] font-bold uppercase tracking-widest mb-4">Traditional JDBC</h4>
+                            <pre class="code-font text-sm text-blue-400 overflow-x-auto"><code>String sql = "INSERT INTO users VALUES (1, 'John')";
+stmt.executeUpdate(sql);</code></pre>
+                        </div>
+                        <div class="bg-black border border-purple-900/30 rounded-xl p-6">
+                            <h4 class="text-purple-500 text-[10px] font-bold uppercase tracking-widest mb-4">Modern Hibernate</h4>
+                            <pre class="code-font text-sm text-purple-400 overflow-x-auto"><code>User user = new User(1, "John");
+session.save(user);</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="orm">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="text-purple-500">02.</span> ORM Mapping Concept
+                    </h2>
+                    <div class="overflow-hidden border border-gray-800 rounded-2xl shadow-2xl">
+                        <table class="w-full text-left border-collapse bg-[#050505]">
+                            <thead>
+                                <tr class="bg-[#111] border-b border-gray-800">
+                                    <th class="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Java World</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Database World</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800/50">
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 text-white font-medium">Class</td>
+                                    <td class="px-6 py-5 text-gray-400">Table</td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 text-white font-medium">Object</td>
+                                    <td class="px-6 py-5 text-gray-400">Row</td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 text-white font-medium">Field</td>
+                                    <td class="px-6 py-5 text-gray-400">Column</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="architecture">
+                    <h2 class="text-2xl font-bold text-white mb-8 flex items-center gap-3">
+                        <span class="text-purple-500">03.</span> Architecture Components
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
+                        <div class="group p-8 bg-[#111] border border-gray-800 rounded-3xl hover:border-purple-500/50 transition-all shadow-lg">
+                            <h4 class="text-white font-bold text-lg mb-2">SessionFactory</h4>
+                            <p class="text-gray-500 text-sm leading-relaxed font-light">The factory for creating sessions. Immutable and heavy—usually one per application context.</p>
+                        </div>
+                        <div class="group p-8 bg-[#111] border border-gray-800 rounded-3xl hover:border-purple-500/50 transition-all shadow-lg">
+                            <h4 class="text-white font-bold text-lg mb-2">Session</h4>
+                            <p class="text-gray-500 text-sm leading-relaxed font-light">Represents a single conversation with the database. Lightweight and used for transient units of work.</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center justify-center p-10 bg-black border border-gray-800 rounded-3xl gap-4 md:gap-8 text-[10px] md:text-xs font-bold uppercase tracking-widest">
+                        <span class="text-gray-500 px-4 py-2 bg-[#111] rounded-lg">App</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-700"></i>
+                        <span class="text-purple-500 px-4 py-2 bg-purple-500/5 border border-purple-500/20 rounded-lg">Hibernate</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-700"></i>
+                        <span class="text-blue-500 px-4 py-2 bg-blue-500/5 border border-blue-500/20 rounded-lg">JDBC</span>
+                        <i data-lucide="chevron-right" class="w-4 h-4 text-gray-700"></i>
+                        <span class="text-gray-500 px-4 py-2 bg-[#111] rounded-lg">Database</span>
+                    </div>
+                </section>
+
+                <section id="crud">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="text-purple-500">04.</span> Core Operations
+                    </h2>
+                    
+                    <div class="rounded-2xl border border-gray-800 bg-[#050505] overflow-hidden mb-8 shadow-2xl">
+                        <div class="flex items-center justify-between px-6 py-4 bg-[#111] border-b border-gray-800">
+                            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">User.java & CRUD</span>
+                            <button onclick="copyCode(this)" class="group flex items-center gap-2 text-xs text-gray-500 hover:text-white transition-colors">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i> <span class="copy-text">Copy code</span>
+                            </button>
+                        </div>
+                        <pre class="p-8 !bg-transparent m-0 overflow-x-auto"><code class="language-java">User user = new User(1, "John");
+
+session.save(user);    // CREATE
+session.get(User.class, 1); // READ
+session.update(user);  // UPDATE
+session.delete(user);  // DELETE</code></pre>
+                    </div>
+                </section>
+
+                <section id="spring-boot">
+                    <h2 class="text-2xl font-bold text-white mb-10 flex items-center gap-3">
+                        <span class="text-purple-500">07.</span> Spring Boot Advantage
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+                        <div class="p-8 bg-[#111] border border-gray-800 rounded-3xl text-center hover:bg-[#151515] transition-colors">
+                            <div class="w-12 h-12 bg-green-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                                <i data-lucide="settings" class="w-6 h-6 text-green-500"></i>
+                            </div>
+                            <h4 class="text-white font-bold mb-3">Auto Config</h4>
+                            <p class="text-gray-500 text-xs leading-relaxed">No more XML or complex setup. Spring Boot does it for you.</p>
+                        </div>
+                        <div class="p-8 bg-[#111] border border-gray-800 rounded-3xl text-center hover:bg-[#151515] transition-colors">
+                            <div class="w-12 h-12 bg-blue-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                                <i data-lucide="server" class="w-6 h-6 text-blue-500"></i>
+                            </div>
+                            <h4 class="text-white font-bold mb-3">Embedded Server</h4>
+                            <p class="text-gray-500 text-xs leading-relaxed">Tomcat is baked in. Just run the JAR file.</p>
+                        </div>
+                        <div class="p-8 bg-[#111] border border-gray-800 rounded-3xl text-center hover:bg-[#151515] transition-colors">
+                            <div class="w-12 h-12 bg-orange-500/10 rounded-2xl flex items-center justify-center mx-auto mb-6">
+                                <i data-lucide="package" class="w-6 h-6 text-orange-500"></i>
+                            </div>
+                            <h4 class="text-white font-bold mb-3">Starters</h4>
+                            <p class="text-gray-500 text-xs leading-relaxed">Standardized dependencies to get you moving fast.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="jpa">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="text-purple-500">10.</span> Spring Data JPA
+                    </h2>
+                    <p class="text-gray-400 mb-10 leading-relaxed">The repository pattern taken to the extreme. Define an interface, and Spring generates the implementation.</p>
+                    
+                    <div class="rounded-2xl border border-gray-800 bg-[#050505] overflow-hidden shadow-2xl">
+                        <div class="flex items-center justify-between px-6 py-4 bg-[#111] border-b border-gray-800">
+                            <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">UserRepository.java</span>
+                            <button onclick="copyCode(this)" class="group flex items-center gap-2 text-xs text-gray-500 hover:text-white transition-colors">
+                                <i data-lucide="copy" class="w-3.5 h-3.5"></i> <span class="copy-text">Copy code</span>
+                            </button>
+                        </div>
+                        <pre class="p-8 !bg-transparent m-0 overflow-x-auto"><code class="language-java">public interface UserRepository extends JpaRepository&lt;User, Integer&gt; {
+    // Basic CRUD methods are generated automatically!
+    // save(), findById(), findAll(), delete()
+}</code></pre>
+                    </div>
+                </section>
+
+                <section id="comparison">
+                    <h2 class="text-2xl font-bold text-white mb-10 flex items-center gap-3">
+                        <span class="text-purple-500">13.</span> Tech Stack Comparison
+                    </h2>
+                    <div class="overflow-hidden border border-gray-800 rounded-2xl shadow-2xl">
+                        <table class="w-full text-left border-collapse bg-[#050505]">
+                            <thead>
+                                <tr class="bg-[#111] border-b border-gray-800">
+                                    <th class="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Feature</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest text-center">JDBC</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest text-center">Hibernate</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest text-center">Spring Boot</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800/50">
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 text-white font-bold">Complexity</td>
+                                    <td class="px-6 py-5 text-gray-500 text-center text-sm">Low</td>
+                                    <td class="px-6 py-5 text-gray-500 text-center text-sm">Medium</td>
+                                    <td class="px-6 py-5 text-gray-500 text-center text-sm">High (Abstracted)</td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 text-white font-bold">Boilerplate</td>
+                                    <td class="px-6 py-5 text-gray-500 text-center text-sm">Extreme</td>
+                                    <td class="px-6 py-5 text-gray-500 text-center text-sm">Moderate</td>
+                                    <td class="px-6 py-5 text-gray-500 text-center text-sm">Minimal</td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 text-white font-bold">Setup Speed</td>
+                                    <td class="px-6 py-5 text-gray-500 text-center text-sm">Fast</td>
+                                    <td class="px-6 py-5 text-gray-500 text-center text-sm">Slow</td>
+                                    <td class="px-6 py-5 text-gray-500 text-center text-sm">Instant</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+
+            <!-- Footer -->
+            <footer class="mt-40 pt-16 border-t border-gray-900 flex flex-col md:flex-row items-center justify-between gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-700">
+                <p>&copy; 2024 Satyam Rana</p>
+                <div class="flex gap-8">
+                    <a href="#" class="hover:text-purple-500 transition-colors">Documentation</a>
+                    <a href="#" class="hover:text-purple-500 transition-colors">Support</a>
+                    <a href="#" class="hover:text-purple-500 transition-colors">Privacy</a>
+                </div>
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        // Initialize Highlight.js
+        hljs.highlightAll();
+        
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Reading Progress Bar
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+
+            // Active TOC State
+            const sections = document.querySelectorAll('section');
+            const navItems = document.querySelectorAll('.toc-item');
+            
+            let current = "";
+            sections.forEach(section => {
+                const sectionTop = section.offsetTop;
+                if (pageYOffset >= sectionTop - 150) {
+                    current = section.getAttribute('id');
+                }
+            });
+
+            navItems.forEach(item => {
+                item.classList.remove('text-purple-500', 'font-bold');
+                item.classList.add('text-gray-500');
+                if (item.getAttribute('href').includes(current)) {
+                    item.classList.add('text-purple-500', 'font-bold');
+                    item.classList.remove('text-gray-500');
+                }
+            });
+        });
+
+        // Copy Code Function
+        function copyCode(btn) {
+            const container = btn.closest('div').parentElement;
+            const code = container.querySelector('pre').innerText;
+            
+            navigator.clipboard.writeText(code).then(() => {
+                const textSpan = btn.querySelector('.copy-text');
+                const originalText = textSpan.innerText;
+                const icon = btn.querySelector('i');
+                
+                textSpan.innerText = 'Copied!';
+                btn.classList.add('text-green-500');
+                
+                setTimeout(() => {
+                    textSpan.innerText = originalText;
+                    btn.classList.remove('text-green-500');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>

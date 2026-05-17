@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Django Framework — Technical Documentation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=JetBrains+Mono:ital,wght@0,100..800;1,100..800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark-dimmed.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        :root {
+            --bg-primary: #000000;
+            --bg-secondary: #0a0a0a;
+            --border-color: #1a1a1a;
+            --text-primary: #f5f5f7;
+            --text-secondary: #86868b;
+            --accent-color: #44b78b;
+            --code-bg: #0d1117;
+        }
+
+        body { 
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background-color: var(--bg-primary);
+            color: var(--text-primary);
+            -webkit-font-smoothing: antialiased;
+            line-height: 1.6;
+        }
+
+        .mono { font-family: 'JetBrains Mono', monospace; }
+        
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: var(--bg-primary); }
+        ::-webkit-scrollbar-thumb { background: #2c2c2e; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: #3a3a3c; }
+
+        /* Typography & Layout */
+        .content-width { max-width: 700px; }
+        p { margin-bottom: 1.5rem; color: var(--text-secondary); }
+        h1, h2, h3, h4 { color: var(--text-primary); font-weight: 600; letter-spacing: -0.02em; }
+        
+        /* Sidebar Navigation */
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 8px 12px;
+            color: var(--text-secondary);
+            font-size: 0.875rem;
+            border-radius: 6px;
+            transition: all 0.2s ease;
+        }
+        .nav-item:hover {
+            color: var(--text-primary);
+            background: rgba(255, 255, 255, 0.05);
+        }
+        .nav-item.active {
+            color: var(--accent-color);
+            background: rgba(68, 183, 139, 0.1);
+            font-weight: 500;
+        }
+
+        /* Subtle Reveal Animation */
+        .reveal {
+            opacity: 0;
+            transform: translateY(10px);
+            transition: opacity 0.6s ease, transform 0.6s ease;
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Clean Components */
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.5rem;
+            transition: border-color 0.3s ease;
+        }
+        .card:hover {
+            border-color: #333;
+        }
+
+        .step-number {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: var(--text-secondary);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col md:flex-row">
+
+    <!-- Discrete Progress Bar -->
+    <div id="progress-bar" class="fixed top-0 left-0 h-[2px] z-[100] transition-all duration-150" style="background-color: var(--accent-color); width: 0%;"></div>
+
+    <!-- Sidebar -->
+    <aside class="w-full md:w-72 bg-secondary border-r border-[#1a1a1a] sticky top-0 h-auto md:h-screen flex flex-col p-6 overflow-hidden">
+        <div class="mb-10 px-2">
+            <div class="flex items-center gap-3 mb-1">
+                <i data-lucide="leaf" class="w-5 h-5 text-accent-color"></i>
+                <span class="font-semibold text-sm tracking-tight">Web Library</span>
+            </div>
+            <p class="text-[11px] text-[#86868b] uppercase tracking-widest font-medium">Django Internals</p>
+        </div>
+
+        <nav class="flex-1 space-y-6 overflow-y-auto no-scrollbar">
+            <div class="space-y-1">
+                <span class="block px-3 pb-2 text-[10px] font-bold text-[#424245] uppercase tracking-widest">General</span>
+                <a href="../Devops_Notes/docker.html" class="nav-item group">
+                    <i data-lucide="arrow-left" class="w-4 h-4 opacity-0 group-hover:opacity-100 transition-opacity"></i>
+                    Back to Docker
+                </a>
+            </div>
+
+            <div class="space-y-1">
+                <span class="block px-3 pb-2 text-[10px] font-bold text-[#424245] uppercase tracking-widest">Django Guide</span>
+                <div id="toc" class="space-y-1">
+                    <a href="#intro" class="nav-item active toc-item">01. Overview</a>
+                    <a href="#mvt" class="nav-item toc-item">02. MVT Architecture</a>
+                    <a href="#cycle" class="nav-item toc-item">03. Request Lifecycle</a>
+                    <a href="#api-vs-jinja" class="nav-item toc-item">04. API vs Jinja</a>
+                    <a href="#modern" class="nav-item toc-item">05. Modern Ecosystem</a>
+                </div>
+            </div>
+        </nav>
+
+        <div class="mt-auto pt-6 border-t border-[#1a1a1a]">
+            <div class="flex items-center justify-between text-[10px] text-[#424245] font-medium">
+                <span>V1.1.0</span>
+                <span>Satyam Rana</span>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 bg-primary overflow-y-auto">
+        <div class="max-w-screen-xl mx-auto px-6 md:px-16 py-12 md:py-24">
+            
+            <div class="content-width">
+                <header class="mb-24 reveal">
+                    <div class="mb-6 flex items-center gap-2">
+                        <span class="text-[10px] font-bold px-2 py-0.5 border border-[#333] rounded text-[#86868b] uppercase tracking-widest">Framework</span>
+                        <span class="w-1 h-1 bg-[#333] rounded-full"></span>
+                        <span class="text-[10px] font-bold text-[#86868b] uppercase tracking-widest">Backend</span>
+                    </div>
+                    <h1 class="text-4xl md:text-5xl mb-6">Django <span class="text-[#44b78b]">Architecture</span></h1>
+                    <p class="text-lg leading-relaxed font-normal">An in-depth exploration of the "Batteries-Included" framework, its internal logic, and the evolution of modern web patterns.</p>
+                </header>
+
+                <div class="space-y-32">
+
+                    <!-- 01. Overview -->
+                    <section id="intro" class="reveal">
+                        <h2 class="text-xl mb-6 flex items-center gap-3">
+                            <span class="text-accent-color opacity-50">01.</span> Philosophy
+                        </h2>
+                        <p>
+                            Django is a high-level Python web framework designed for rapid development and clean design. Its primary goal is to provide a complete toolkit that handles the common "boring" parts of web development, allowing you to focus on your app's unique features.
+                        </p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-10">
+                            <div class="card">
+                                <h4 class="text-sm mb-2 font-semibold">Batteries Included</h4>
+                                <p class="text-xs mb-0">From auth to admin panels, Django provides a robust foundation out of the box, reducing technical debt and configuration overhead.</p>
+                            </div>
+                            <div class="card">
+                                <h4 class="text-sm mb-2 font-semibold">Pragmatic Design</h4>
+                                <p class="text-xs mb-0">Encourages the "Don't Repeat Yourself" (DRY) principle, leading to more maintainable and cleaner codebases.</p>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 02. MVT Architecture -->
+                    <section id="mvt" class="reveal">
+                        <h2 class="text-xl mb-6 flex items-center gap-3">
+                            <span class="text-accent-color opacity-50">02.</span> MVT Architecture
+                        </h2>
+                        <p class="mb-10">Unlike the traditional Model-View-Controller (MVC) pattern, Django uses Model-View-Template. This slight variation clarifies the separation between data, logic, and presentation.</p>
+                        
+                        <div class="space-y-4">
+                            <div class="p-6 bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl flex items-start gap-4">
+                                <i data-lucide="database" class="w-5 h-5 text-emerald-500 mt-1 shrink-0"></i>
+                                <div>
+                                    <h4 class="text-sm font-semibold mb-1">Model (Data)</h4>
+                                    <p class="text-xs mb-0 text-[#86868b]">The single source of truth for your data. Defines structure through Python classes and handles database abstractions automatically.</p>
+                                </div>
+                            </div>
+                            <div class="p-6 bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl flex items-start gap-4">
+                                <i data-lucide="brain" class="w-5 h-5 text-emerald-500 mt-1 shrink-0"></i>
+                                <div>
+                                    <h4 class="text-sm font-semibold mb-1">View (Logic)</h4>
+                                    <p class="text-xs mb-0 text-[#86868b]">The bridge between data and presentation. It receives requests, interacts with models, and chooses the appropriate template or data format to return.</p>
+                                </div>
+                            </div>
+                            <div class="p-6 bg-[#0a0a0a] border border-[#1a1a1a] rounded-xl flex items-start gap-4">
+                                <i data-lucide="layout" class="w-5 h-5 text-emerald-500 mt-1 shrink-0"></i>
+                                <div>
+                                    <h4 class="text-sm font-semibold mb-1">Template (Presentation)</h4>
+                                    <p class="text-xs mb-0 text-[#86868b]">The layer that defines what the user sees. In traditional Django, this is HTML enhanced with Template Tags; in modern setups, this might be a JSON response.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 03. Request Cycle -->
+                    <section id="cycle" class="reveal">
+                        <h2 class="text-xl mb-6 flex items-center gap-3">
+                            <span class="text-accent-color opacity-50">03.</span> Request Lifecycle
+                        </h2>
+                        <p class="mb-10">Understanding how a request travels through Django is key to mastering the framework. It follows a predictable, linear journey.</p>
+                        
+                        <div class="space-y-8">
+                            <div class="flex gap-6">
+                                <div class="step-number shrink-0">1</div>
+                                <div>
+                                    <h4 class="text-sm font-semibold mb-1">URL Dispatcher</h4>
+                                    <p class="text-xs">Django checks the incoming URL against patterns in <code class="text-primary">urls.py</code> to identify the target View.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="step-number shrink-0">2</div>
+                                <div>
+                                    <h4 class="text-sm font-semibold mb-1">View Processing</h4>
+                                    <p class="text-xs">The View executes business logic, querying the Model if data is needed for the request.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-6">
+                                <div class="step-number shrink-0">3</div>
+                                <div>
+                                    <h4 class="text-sm font-semibold mb-1">Response Generation</h4>
+                                    <p class="text-xs">The View renders a Template or serializes data, returning a standard HTTP Response to the browser.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 04. API vs Jinja -->
+                    <section id="api-vs-jinja" class="reveal">
+                        <h2 class="text-xl mb-6 flex items-center gap-3">
+                            <span class="text-accent-color opacity-50">04.</span> API vs. Jinja
+                        </h2>
+                        <p class="mb-10">Web patterns have evolved from monoliths to decoupled architectures. Understanding which pattern to use depends on your frontend strategy.</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                            <div class="space-y-4">
+                                <h4 class="text-xs font-bold text-[#424245] uppercase tracking-widest">Jinja (Server-Side)</h4>
+                                <div class="p-5 border border-[#1a1a1a] rounded-xl">
+                                    <p class="text-xs mb-3 text-primary font-medium italic">"Classic Monolith"</p>
+                                    <p class="text-xs mb-0">Server renders full HTML. Best for blogs, internal tools, and SEO-critical static content.</p>
+                                </div>
+                            </div>
+                            <div class="space-y-4">
+                                <h4 class="text-xs font-bold text-[#424245] uppercase tracking-widest">API (Decoupled)</h4>
+                                <div class="p-5 border border-[#1a1a1a] rounded-xl">
+                                    <p class="text-xs mb-3 text-[#44b78b] font-medium italic">"Modern & Scalable"</p>
+                                    <p class="text-xs mb-0">Django serves JSON. Best for SPAs (React/Vue) and mobile applications.</p>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+
+                    <!-- 05. Modern Ecosystem -->
+                    <section id="modern" class="reveal">
+                        <h2 class="text-xl mb-6 flex items-center gap-3">
+                            <span class="text-accent-color opacity-50">05.</span> Modern Ecosystem
+                        </h2>
+                        <div class="p-8 bg-[#0a0a0a] border border-[#1a1a1a] rounded-2xl">
+                            <div class="flex items-center gap-4 mb-6">
+                                <i data-lucide="zap" class="w-6 h-6 text-emerald-500"></i>
+                                <h4 class="text-sm font-semibold">Django REST Framework</h4>
+                            </div>
+                            <p class="text-xs mb-6 text-[#86868b]">
+                                For modern API-first development, Django REST Framework (DRF) is the industry standard. It brings powerful serialization, authentication, and a browsable API to the core Django engine.
+                            </p>
+                            <div class="inline-block px-3 py-1 border border-[#333] rounded text-[10px] font-bold text-[#424245] uppercase tracking-widest">
+                                Coming Next: DRF Deep Dive
+                            </div>
+                        </div>
+                    </section>
+
+                </div>
+
+                <footer class="mt-40 pt-12 border-t border-[#1a1a1a] flex justify-between items-center text-[11px] text-[#424245] font-medium uppercase tracking-widest">
+                    <span>Documentation &copy; 2024</span>
+                    <div class="flex gap-6">
+                        <a href="#" class="hover:text-[#86868b] transition-colors">Framework Docs</a>
+                        <a href="#" class="hover:text-[#86868b] transition-colors">DRF Library</a>
+                    </div>
+                </footer>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        hljs.highlightAll();
+        lucide.createIcons();
+
+        // Intersection Observer for Reveal Animations
+        const observerOptions = { threshold: 0.1 };
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) entry.target.classList.add('active');
+            });
+        }, observerOptions);
+        document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+        // Scroll Progress & TOC Highlighting
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+
+            const sections = document.querySelectorAll('section');
+            const navItems = document.querySelectorAll('.toc-item');
+            let current = "";
+            sections.forEach(section => {
+                if (pageYOffset >= section.offsetTop - 150) current = section.getAttribute('id');
+            });
+            navItems.forEach(item => {
+                item.classList.remove('active');
+                if (item.getAttribute('href').includes(current)) item.classList.add('active');
+            });
+        });
+    </script>
+</body>
+</html>

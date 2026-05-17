@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JDBC in Java - Clean Notes</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/github-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .code-font { font-family: 'Fira Code', monospace; }
+        .no-scrollbar::-webkit-scrollbar { display: none; }
+        .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+        * { transition: background-color 0.2s, border-color 0.2s; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #262626; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #333; }
+    </style>
+</head>
+<body class="bg-[#0a0a0a] text-gray-300 min-h-screen flex flex-col md:flex-row">
+
+    <div id="progress-bar" class="fixed top-0 left-0 h-0.5 bg-gradient-to-r from-green-500 to-emerald-500 z-[100] transition-all duration-100"></div>
+
+    <!-- Sidebar -->
+    <aside class="w-full md:w-80 bg-[#000] border-r border-gray-800 sticky top-0 h-auto md:h-screen flex flex-col overflow-hidden">
+        <div class="p-8">
+            <div class="flex items-center gap-3 mb-10">
+                <div class="w-10 h-10 bg-green-600 rounded-xl flex items-center justify-center shadow-lg shadow-green-900/20">
+                    <i data-lucide="database" class="w-6 h-6 text-white"></i>
+                </div>
+                <div>
+                    <h1 class="text-white font-bold text-lg tracking-tight leading-none">Java Notes</h1>
+                    <p class="text-gray-600 text-[10px] uppercase tracking-widest mt-1 font-bold">JDBC Masterclass</p>
+                </div>
+            </div>
+
+            <!-- Global Links -->
+            <nav class="space-y-1 mb-10">
+                <a href="jdbc.html" class="flex items-center gap-3 px-4 py-2.5 text-sm text-white bg-[#111] border border-gray-800 rounded-lg shadow-sm">
+                    <i data-lucide="database" class="w-4 h-4 text-green-500"></i> JDBC Notes
+                </a>
+                <a href="hibernate.html" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-500 hover:text-white hover:bg-gray-900 rounded-lg transition-all group">
+                    <i data-lucide="zap" class="w-4 h-4 group-hover:text-purple-500"></i> Hibernate Notes
+                </a>
+                <a href="springboot.html" class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-500 hover:text-white hover:bg-gray-900 rounded-lg transition-all group">
+                    <i data-lucide="layout" class="w-4 h-4 group-hover:text-green-500"></i> REST API Notes
+                </a>
+            </nav>
+
+            <!-- Table of Contents -->
+            <div class="text-[10px] font-bold text-gray-600 uppercase tracking-widest mb-4 px-4">Sections</div>
+            <nav class="space-y-0.5 overflow-y-auto max-h-[50vh] no-scrollbar px-1" id="toc">
+                <a href="#intro" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">What is JDBC?</a>
+                <a href="#architecture" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">Architecture</a>
+                <a href="#core-classes" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">Core Classes</a>
+                <a href="#workflow" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">Workflow</a>
+                <a href="#statement-vs-prepared" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">Statement vs Prepared</a>
+                <a href="#resultset" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">ResultSet Deep Dive</a>
+                <a href="#methods" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">Method Comparison</a>
+                <a href="#transactions" class="toc-item block px-3 py-2 text-sm text-gray-500 hover:text-gray-300 rounded-md">Transactions</a>
+            </nav>
+        </div>
+        
+        <div class="mt-auto p-8 border-t border-gray-900 bg-[#050505]">
+            <div class="flex items-center justify-between text-gray-600 text-[10px] font-bold uppercase tracking-widest">
+                <span>v2.1.0</span>
+                <i data-lucide="refresh-cw" class="w-3 h-3"></i>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 overflow-y-auto scroll-smooth">
+        <div class="max-w-4xl mx-auto px-6 py-16 md:py-24">
+            
+            <header class="mb-20">
+                <div class="inline-flex items-center gap-2 px-3 py-1 bg-green-500/10 border border-green-500/20 rounded-full text-green-400 text-[10px] font-bold uppercase tracking-widest mb-6">
+                    <i data-lucide="book-open" class="w-3 h-3"></i> Tutorial
+                </div>
+                <h1 class="text-4xl md:text-6xl font-black text-white mb-8 tracking-tight">JDBC: <span class="text-green-500">Java Database</span> Connectivity</h1>
+                <p class="text-xl text-gray-400 leading-relaxed max-w-2xl font-light">The foundational API for database interaction in Java. Learn to build the bridge between your code and data server.</p>
+            </header>
+
+            <div class="space-y-32">
+
+                <section id="intro">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="text-green-500">01.</span> What is JDBC?
+                    </h2>
+                    <p class="mb-8 text-lg text-gray-400 leading-relaxed">
+                        JDBC is a standard Java API that allows applications to connect to a wide variety of relational databases using SQL.
+                    </p>
+                    
+                    <div class="bg-[#111] border border-gray-800 rounded-2xl p-8 mb-10 shadow-xl relative overflow-hidden">
+                        <div class="absolute -right-4 -bottom-4 opacity-[0.03]">
+                            <i data-lucide="database" class="w-32 h-32 text-white"></i>
+                        </div>
+                        <h3 class="text-green-400 font-bold text-sm uppercase tracking-widest mb-4">Core Philosophy</h3>
+                        <p class="text-xl text-white font-medium mb-0">"Write once, connect to any database server via standard SQL."</p>
+                    </div>
+
+                    <ul class="grid grid-cols-1 md:grid-cols-3 gap-4 list-none p-0">
+                        <li class="bg-[#050505] border border-gray-900 p-4 rounded-xl text-sm flex items-center gap-3">
+                            <i data-lucide="link" class="w-4 h-4 text-green-500"></i> Connect to DB
+                        </li>
+                        <li class="bg-[#050505] border border-gray-900 p-4 rounded-xl text-sm flex items-center gap-3">
+                            <i data-lucide="code-2" class="w-4 h-4 text-green-500"></i> Execute Queries
+                        </li>
+                        <li class="bg-[#050505] border border-gray-900 p-4 rounded-xl text-sm flex items-center gap-3">
+                            <i data-lucide="table" class="w-4 h-4 text-green-500"></i> Process Data
+                        </li>
+                    </ul>
+                </section>
+
+                <section id="architecture">
+                    <h2 class="text-2xl font-bold text-white mb-10 flex items-center gap-3">
+                        <span class="text-green-500">02.</span> Architecture Layers
+                    </h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="group p-8 bg-[#111] border border-gray-800 rounded-3xl hover:border-green-500/50 transition-all shadow-lg">
+                            <h4 class="text-white font-bold text-lg mb-2">JDBC API</h4>
+                            <p class="text-gray-500 text-sm leading-relaxed font-light">The standard interface provided by Java (<code class="text-emerald-500">java.sql</code>). It's what you write in your code.</p>
+                        </div>
+                        <div class="group p-8 bg-[#111] border border-gray-800 rounded-3xl hover:border-green-500/50 transition-all shadow-lg">
+                            <h4 class="text-white font-bold text-lg mb-2">JDBC Driver</h4>
+                            <p class="text-gray-500 text-sm leading-relaxed font-light">Database-specific logic provided by vendors like MySQL. It translates API calls to DB-specific commands.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="core-classes">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="text-green-500">03.</span> Core Classes & Interfaces
+                    </h2>
+                    <div class="overflow-hidden border border-gray-800 rounded-2xl shadow-2xl">
+                        <table class="w-full text-left border-collapse bg-[#050505]">
+                            <thead>
+                                <tr class="bg-[#111] border-b border-gray-800">
+                                    <th class="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Component</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Responsibility</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800/50">
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 font-bold text-green-500 code-font text-sm">DriverManager</td>
+                                    <td class="px-6 py-5 text-gray-400 text-sm">Creates connections based on DB URLs.</td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 font-bold text-green-500 code-font text-sm">Connection</td>
+                                    <td class="px-6 py-5 text-gray-400 text-sm">Maintains a session with the database.</td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 font-bold text-green-500 code-font text-sm">Statement</td>
+                                    <td class="px-6 py-5 text-gray-400 text-sm">Executes simple SQL queries.</td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 font-bold text-green-500 code-font text-sm">PreparedStatement</td>
+                                    <td class="px-6 py-5 text-gray-400 text-sm">Handles precompiled, secure queries.</td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 font-bold text-green-500 code-font text-sm">ResultSet</td>
+                                    <td class="px-6 py-5 text-gray-400 text-sm">Acts as a cursor for query results.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section id="workflow">
+                    <h2 class="text-2xl font-bold text-white mb-6 flex items-center gap-3">
+                        <span class="text-green-500">04.</span> Step-by-Step Workflow
+                    </h2>
+                    
+                    <div class="space-y-4">
+                        <div class="rounded-2xl border border-gray-800 bg-[#050505] overflow-hidden shadow-2xl">
+                            <div class="flex items-center justify-between px-6 py-4 bg-[#111] border-b border-gray-800">
+                                <span class="text-[10px] font-bold text-gray-500 uppercase tracking-widest">Full JDBC Cycle</span>
+                                <button onclick="copyCode(this)" class="group flex items-center gap-2 text-xs text-gray-500 hover:text-white transition-colors">
+                                    <i data-lucide="copy" class="w-3.5 h-3.5"></i> <span class="copy-text">Copy code</span>
+                                </button>
+                            </div>
+                            <pre class="p-8 !bg-transparent m-0 overflow-x-auto"><code class="language-java">// 1. Load Driver
+Class.forName("com.mysql.cj.jdbc.Driver");
+
+// 2. Connect
+Connection con = DriverManager.getConnection(url, user, pass);
+
+// 3. Execute
+Statement stmt = con.createStatement();
+ResultSet rs = stmt.executeQuery("SELECT * FROM users");
+
+// 4. Process & Close
+while(rs.next()) { ... }
+con.close();</code></pre>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="methods">
+                    <h2 class="text-2xl font-bold text-white mb-10 flex items-center gap-3">
+                        <span class="text-green-500">08.</span> Method Comparison
+                    </h2>
+                    <div class="overflow-hidden border border-gray-800 rounded-2xl shadow-2xl">
+                        <table class="w-full text-left border-collapse bg-[#050505]">
+                            <thead>
+                                <tr class="bg-[#111] border-b border-gray-800">
+                                    <th class="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">Method</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest">SQL Type</th>
+                                    <th class="px-6 py-4 text-[10px] font-bold text-gray-500 uppercase tracking-widest text-right">Returns</th>
+                                </tr>
+                            </thead>
+                            <tbody class="divide-y divide-gray-800/50">
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 text-white font-bold">executeQuery()</td>
+                                    <td class="px-6 py-5 text-gray-500 text-sm">SELECT</td>
+                                    <td class="px-6 py-5 text-green-500 font-mono text-xs text-right">ResultSet</td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 text-white font-bold">executeUpdate()</td>
+                                    <td class="px-6 py-5 text-gray-500 text-sm">I / U / D</td>
+                                    <td class="px-6 py-5 text-green-500 font-mono text-xs text-right">int</td>
+                                </tr>
+                                <tr class="hover:bg-white/[0.02] transition-colors">
+                                    <td class="px-6 py-5 text-white font-bold">execute()</td>
+                                    <td class="px-6 py-5 text-gray-500 text-sm">Generic</td>
+                                    <td class="px-6 py-5 text-green-500 font-mono text-xs text-right">boolean</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+
+            <footer class="mt-40 pt-16 border-t border-gray-900 flex flex-col md:flex-row items-center justify-between gap-8 text-[10px] font-bold uppercase tracking-[0.2em] text-gray-700">
+                <p>&copy; 2024 Satyam Rana</p>
+                <div class="flex gap-8">
+                    <a href="#" class="hover:text-green-500 transition-colors">Documentation</a>
+                    <a href="#" class="hover:text-green-500 transition-colors">Support</a>
+                    <a href="#" class="hover:text-green-500 transition-colors">Privacy</a>
+                </div>
+            </footer>
+        </div>
+    </main>
+
+    <script>
+        hljs.highlightAll();
+        lucide.createIcons();
+
+        window.addEventListener('scroll', () => {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById("progress-bar").style.width = scrolled + "%";
+
+            const sections = document.querySelectorAll('section');
+            const navItems = document.querySelectorAll('.toc-item');
+            let current = "";
+            sections.forEach(section => {
+                if (pageYOffset >= section.offsetTop - 150) current = section.getAttribute('id');
+            });
+            navItems.forEach(item => {
+                item.classList.remove('text-green-500', 'font-bold');
+                item.classList.add('text-gray-500');
+                if (item.getAttribute('href').includes(current)) {
+                    item.classList.add('text-green-500', 'font-bold');
+                    item.classList.remove('text-gray-500');
+                }
+            });
+        });
+
+        function copyCode(btn) {
+            const container = btn.closest('div').parentElement;
+            const code = container.querySelector('pre').innerText;
+            navigator.clipboard.writeText(code).then(() => {
+                const textSpan = btn.querySelector('.copy-text');
+                const originalText = textSpan.innerText;
+                textSpan.innerText = 'Copied!';
+                btn.classList.add('text-green-500');
+                setTimeout(() => {
+                    textSpan.innerText = originalText;
+                    btn.classList.remove('text-green-500');
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+</html>
