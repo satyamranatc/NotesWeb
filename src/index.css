@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-zinc-950 text-zinc-300 antialiased selection:bg-teal-500/30 selection:text-teal-200;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+}
+
+/* Custom Scrollbars */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: theme('colors.zinc.950');
+}
+::-webkit-scrollbar-thumb {
+  background: theme('colors.zinc.800');
+  border-radius: 9999px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: theme('colors.zinc.700');
+}
+
+/* Hide scrollbars for specific containers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Custom visualizer animation */
+@keyframes pulse-edge {
+  0% { stroke-opacity: 0.4; }
+  50% { stroke-opacity: 1; stroke-width: 6px; }
+  100% { stroke-opacity: 0.4; }
+}
+
+.active-edge {
+  animation: pulse-edge 1.5s infinite;
+}
+
+/* Glassmorphism Styles */
+.glass-panel {
+  @apply bg-zinc-900/40 backdrop-blur-md border border-zinc-800/60;
+}
+.glass-header {
+  @apply sticky top-0 z-40 bg-zinc-950/60 backdrop-blur-md border-b border-zinc-900;
+}
