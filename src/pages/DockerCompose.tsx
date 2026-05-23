@@ -69,7 +69,7 @@ CMD ["npm", "start"]`
       initial="initial"
       animate="animate"
       exit="exit"
-      className="max-w-4xl mx-auto px-6 py-16 md:py-24 space-y-24"
+      className="max-w-6xl mx-auto px-6 py-16 md:py-24 space-y-24"
     >
       {/* Page Header */}
       <header className="space-y-6">

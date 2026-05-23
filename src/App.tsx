@@ -1,24 +1,35 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, lazy, Suspense } from "react";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 import { AnimatePresence, motion } from "framer-motion";
 import Sidebar from "./components/Sidebar";
 import Navbar from "./components/Navbar";
 import ScrollToTop from "./components/ScrollToTop";
 
-// Page Imports
-import Home from "./pages/Home";
-import PromptEngineering from "./pages/PromptEngineering";
-import Docker from "./pages/Docker";
-import DockerCompose from "./pages/DockerCompose";
-import SpanningTrees from "./pages/SpanningTrees";
-import Dijkstra from "./pages/Dijkstra";
-import QuestionGuide from "./pages/QuestionGuide";
-import JDBC from "./pages/JDBC";
-import Hibernate from "./pages/Hibernate";
-import SpringBootREST from "./pages/SpringBootREST";
-import Django from "./pages/Django";
-import Networking from "./pages/Networking";
-import SqlJoins from "./pages/SqlJoins";
+// Lazy-loaded Page Imports
+const Home = lazy(() => import("./pages/Home"));
+const IntroToAI = lazy(() => import("./pages/IntroToAI"));
+const PromptEngineering = lazy(() => import("./pages/PromptEngineering"));
+const Docker = lazy(() => import("./pages/Docker"));
+const DockerCompose = lazy(() => import("./pages/DockerCompose"));
+const SpanningTrees = lazy(() => import("./pages/SpanningTrees"));
+const Dijkstra = lazy(() => import("./pages/Dijkstra"));
+const QuestionGuide = lazy(() => import("./pages/QuestionGuide"));
+const JDBC = lazy(() => import("./pages/JDBC"));
+const Hibernate = lazy(() => import("./pages/Hibernate"));
+const SpringBootREST = lazy(() => import("./pages/SpringBootREST"));
+const Django = lazy(() => import("./pages/Django"));
+const Networking = lazy(() => import("./pages/Networking"));
+const SqlJoins = lazy(() => import("./pages/SqlJoins"));
+
+// Loading fallback component
+const LoadingFallback = () => (
+  <div className="flex items-center justify-center min-h-[60vh] w-full bg-black">
+    <div className="relative w-10 h-10">
+      <div className="absolute inset-0 border-2 border-zinc-800 rounded-full"></div>
+      <div className="absolute inset-0 border-2 border-t-teal-500 border-l-teal-500 rounded-full animate-spin"></div>
+    </div>
+  </div>
+);
 
 function AppContent() {
   const location = useLocation();
@@ -78,30 +89,35 @@ function AppContent() {
       <main className="flex-1 md:pl-80 min-h-[calc(100vh-73px)] md:min-h-screen flex flex-col justify-between">
         <div className="flex-1 w-full">
           <AnimatePresence mode="wait">
-            <Routes location={location} key={location.pathname}>
-              <Route path="/" element={<Home />} />
-              <Route path="/ai/prompt-engineering" element={<PromptEngineering />} />
-              <Route path="/devops/docker" element={<Docker />} />
-              <Route path="/devops/docker-compose" element={<DockerCompose />} />
-              <Route path="/dsa/kruskal-mst" element={<SpanningTrees />} />
-              <Route path="/dsa/dijkstra" element={<Dijkstra />} />
-              <Route path="/dsa/question-guide" element={<QuestionGuide />} />
-              <Route path="/java/jdbc" element={<JDBC />} />
-              <Route path="/java/hibernate" element={<Hibernate />} />
-              <Route path="/java/springboot" element={<SpringBootREST />} />
-              <Route path="/web/django" element={<Django />} />
-              <Route path="/web/networking" element={<Networking />} />
-              <Route path="/sql/joins" element={<SqlJoins />} />
-            </Routes>
+            <Suspense fallback={<LoadingFallback />}>
+              <Routes location={location} key={location.pathname}>
+                <Route path="/" element={<Home />} />
+                <Route path="/ai/intro-to-ai" element={<IntroToAI />} />
+                <Route path="/ai/prompt-engineering" element={<PromptEngineering />} />
+                <Route path="/devops/docker" element={<Docker />} />
+                <Route path="/devops/docker-compose" element={<DockerCompose />} />
+                <Route path="/dsa/kruskal-mst" element={<SpanningTrees />} />
+                <Route path="/dsa/dijkstra" element={<Dijkstra />} />
+                <Route path="/dsa/question-guide" element={<QuestionGuide />} />
+                <Route path="/java/jdbc" element={<JDBC />} />
+                <Route path="/java/hibernate" element={<Hibernate />} />
+                <Route path="/java/springboot" element={<SpringBootREST />} />
+                <Route path="/web/django" element={<Django />} />
+                <Route path="/web/networking" element={<Networking />} />
+                <Route path="/sql/joins" element={<SqlJoins />} />
+              </Routes>
+            </Suspense>
           </AnimatePresence>
         </div>
 
         {/* Global Mini Footer */}
-        <footer className="w-full max-w-4xl mx-auto px-6 py-12 border-t border-zinc-950 text-center md:text-left flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-700 bg-black/25">
-          <p>© 2026 Satyam Rana • Personal Wiki</p>
-          <div className="flex gap-6">
-            <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-zinc-400 transition-colors">Github</a>
-            <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-zinc-400 transition-colors">LinkedIn</a>
+        <footer className="w-full border-t border-zinc-900/60 bg-zinc-950/20 py-12 mt-auto">
+          <div className="max-w-6xl mx-auto px-6 flex flex-col md:flex-row items-center justify-between gap-6 text-[10px] font-bold uppercase tracking-[0.2em] text-zinc-700">
+            <p>© 2026 Satyam Rana • Personal Wiki</p>
+            <div className="flex gap-6">
+              <a href="https://github.com" target="_blank" rel="noreferrer" className="hover:text-zinc-400 transition-colors">Github</a>
+              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="hover:text-zinc-400 transition-colors">LinkedIn</a>
+            </div>
           </div>
         </footer>
       </main>

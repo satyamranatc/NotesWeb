@@ -279,7 +279,7 @@ export default function QuestionGuide() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="max-w-4xl mx-auto px-6 py-16 md:py-24 space-y-24"
+      className="max-w-6xl mx-auto px-6 py-16 md:py-24 space-y-24"
     >
       {/* Header */}
       <header className="space-y-6">
@@ -483,8 +483,8 @@ export default function QuestionGuide() {
         </p>
 
         <div className="border border-zinc-900 rounded-3xl overflow-hidden bg-zinc-950/20 shadow-2xl">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left border-collapse text-xs">
+          <div className="overflow-x-auto scrollbar-thin">
+            <table className="w-full min-w-[600px] md:min-w-0 text-left border-collapse text-xs">
               <thead>
                 <tr className="border-b border-zinc-900 text-zinc-500 font-bold uppercase tracking-wider bg-zinc-950/30">
                   <th className="p-4">Data Structure</th>

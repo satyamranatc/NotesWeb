@@ -74,7 +74,7 @@ export default function Hibernate() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="max-w-4xl mx-auto px-6 py-16 md:py-24 space-y-24 animate-fade-in"
+      className="max-w-6xl mx-auto px-6 py-16 md:py-24 space-y-24 animate-fade-in"
     >
       {/* Page Header */}
       <header className="space-y-6">
@@ -285,8 +285,8 @@ public interface UserRepository extends JpaRepository<User, Integer> {
         <h2 className="text-2xl font-bold text-white flex items-center gap-3">
           <span className="text-purple-400">05.</span> JDBC vs Hibernate vs Spring Boot
         </h2>
-        <div className="overflow-hidden border border-zinc-900 rounded-2xl shadow-xl">
-          <table className="w-full text-left border-collapse bg-zinc-950/20 text-xs">
+        <div className="overflow-x-auto border border-zinc-900 rounded-2xl shadow-xl scrollbar-thin">
+          <table className="w-full min-w-[700px] md:min-w-0 text-left border-collapse bg-zinc-950/20 text-xs">
             <thead>
               <tr className="bg-zinc-900/30 border-b border-zinc-900">
                 <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Dimension</th>

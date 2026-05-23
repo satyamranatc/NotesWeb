@@ -59,7 +59,7 @@ export default function Home() {
       </motion.div>
 
       {/* Global Portal Search */}
-      <motion.div variants={itemVariants} className="max-w-2xl bg-zinc-900/40 p-4 border border-zinc-900 rounded-3xl backdrop-blur-md">
+      <motion.div variants={itemVariants} className="w-full max-w-2xl bg-zinc-900/40 p-4 border border-zinc-900 rounded-3xl backdrop-blur-md">
         <div className="relative group">
           <Search className="absolute left-4 top-3.5 w-5 h-5 text-zinc-500 group-focus-within:text-teal-400 transition-colors" />
           <input
@@ -115,7 +115,7 @@ export default function Home() {
         /* Categories Grids */
         <motion.div 
           variants={containerVariants}
-          className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
+          className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6"
         >
           {categories.map((cat, idx) => {
             // Get category styling based on its first page
@@ -124,8 +124,8 @@ export default function Home() {
             
             return (
               <motion.div key={idx} variants={itemVariants} className="h-full">
-                <CardContainer containerClassName="py-0 flex items-stretch h-full w-full">
-                  <CardBody className="bg-zinc-900/40 hover:bg-zinc-800/40 hover:scale-[1.02] backdrop-blur-xl border border-white/5 hover:border-teal-500/20 rounded-[2rem] p-8 flex flex-col justify-between transition-all duration-500 shadow-2xl shadow-black/50 relative overflow-hidden group h-full w-full">
+                <CardContainer containerClassName="py-0 flex items-stretch h-full w-full" className="w-full h-full">
+                  <CardBody className="bg-zinc-900/40 hover:bg-zinc-800/40 hover:scale-[1.02] backdrop-blur-xl border border-white/5 hover:border-teal-500/20 rounded-[2rem] p-8 flex flex-col justify-between transition-all duration-500 shadow-2xl shadow-black/50 relative overflow-hidden group h-[350px] w-full">
                     {/* Visual Accent Glow */}
                     <CardItem translateZ="40" className={`absolute -right-8 -top-8 w-24 h-24 rounded-full filter blur-2xl opacity-10 transition-opacity group-hover:opacity-15 bg-current ${samplePage.accentClass.split(' ')[0]}`} />
 

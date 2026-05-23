@@ -237,7 +237,7 @@ export default function SqlJoins() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="max-w-4xl mx-auto px-6 py-16 md:py-24 space-y-24"
+      className="max-w-6xl mx-auto px-6 py-16 md:py-24 space-y-24"
     >
       {/* Page Header */}
       <header className="space-y-6">
@@ -267,8 +267,8 @@ export default function SqlJoins() {
             <span className="text-[10px] text-zinc-550 font-bold uppercase tracking-widest flex items-center gap-1.5">
               <Table className="w-3.5 h-3.5" /> Table A: Users
             </span>
-            <div className="overflow-hidden border border-zinc-900 rounded-xl">
-              <table className="w-full text-left border-collapse bg-zinc-950/20 text-xs">
+            <div className="overflow-x-auto border border-zinc-900 rounded-xl scrollbar-thin">
+              <table className="w-full min-w-[300px] md:min-w-0 text-left border-collapse bg-zinc-950/20 text-xs">
                 <thead>
                   <tr className="bg-zinc-900/30 border-b border-zinc-900 font-mono text-[10px] text-zinc-500">
                     <th className="px-4 py-3">id</th>
@@ -294,8 +294,8 @@ export default function SqlJoins() {
             <span className="text-[10px] text-zinc-550 font-bold uppercase tracking-widest flex items-center gap-1.5">
               <Table className="w-3.5 h-3.5" /> Table B: Cities
             </span>
-            <div className="overflow-hidden border border-zinc-900 rounded-xl">
-              <table className="w-full text-left border-collapse bg-zinc-950/20 text-xs">
+            <div className="overflow-x-auto border border-zinc-900 rounded-xl scrollbar-thin">
+              <table className="w-full min-w-[300px] md:min-w-0 text-left border-collapse bg-zinc-950/20 text-xs">
                 <thead>
                   <tr className="bg-zinc-900/30 border-b border-zinc-900 font-mono text-[10px] text-zinc-550">
                     <th className="px-4 py-3">id</th>
@@ -445,8 +445,8 @@ export default function SqlJoins() {
             <span className="text-[10px] text-zinc-550 font-bold uppercase tracking-widest flex items-center gap-1.5">
               <Table className="w-3.5 h-3.5" /> Simulated Query Output Rows
             </span>
-            <div className="overflow-hidden border border-zinc-900 rounded-3xl h-[220px] overflow-y-auto no-scrollbar bg-zinc-950/20">
-              <table className="w-full text-left border-collapse text-xs">
+            <div className="overflow-x-auto border border-zinc-900 rounded-3xl h-[220px] overflow-y-auto scrollbar-thin bg-zinc-950/20">
+              <table className="w-full min-w-[300px] md:min-w-0 text-left border-collapse text-xs">
                 <thead>
                   <tr className="bg-zinc-900/30 border-b border-zinc-900 font-mono text-[10px] text-zinc-500 sticky top-0 backdrop-blur">
                     <th className="px-5 py-4.5">users.name</th>

@@ -57,7 +57,7 @@ export default function JDBC() {
       initial="initial"
       animate="animate"
       exit="exit"
-      className="max-w-4xl mx-auto px-6 py-16 md:py-24 space-y-24"
+      className="max-w-6xl mx-auto px-6 py-16 md:py-24 space-y-24"
     >
       {/* Page Header */}
       <header className="space-y-6">
@@ -153,8 +153,8 @@ export default function JDBC() {
           JDBC utilizes a multi-layer pattern splitting responsibility between client-facing APIs and backend translation drivers.
         </p>
 
-        <div className="overflow-hidden border border-zinc-900 rounded-2xl shadow-xl">
-          <table className="w-full text-left border-collapse bg-zinc-950/20">
+        <div className="overflow-x-auto border border-zinc-900 rounded-2xl shadow-xl scrollbar-thin">
+          <table className="w-full min-w-[600px] md:min-w-0 text-left border-collapse bg-zinc-950/20">
             <thead>
               <tr className="bg-zinc-900/30 border-b border-zinc-900">
                 <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Component</th>
@@ -196,8 +196,8 @@ export default function JDBC() {
           Use the correct Java execution hook depending on what kind of SQL operation you wish to perform.
         </p>
 
-        <div className="overflow-hidden border border-zinc-900 rounded-2xl shadow-xl">
-          <table className="w-full text-left border-collapse bg-zinc-950/20">
+        <div className="overflow-x-auto border border-zinc-900 rounded-2xl shadow-xl scrollbar-thin">
+          <table className="w-full min-w-[600px] md:min-w-0 text-left border-collapse bg-zinc-950/20">
             <thead>
               <tr className="bg-zinc-900/30 border-b border-zinc-900">
                 <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Execute Method</th>

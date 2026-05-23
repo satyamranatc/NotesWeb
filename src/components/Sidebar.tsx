@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   Search, BookOpen, Cpu, Terminal, GitBranch, Database, Globe, 
-  ChevronRight, RefreshCw, Layers, Route
+  ChevronRight, RefreshCw, Layers, Route, Brain
 } from "lucide-react";
 
 export interface DocPage {
@@ -23,6 +23,13 @@ export const categories: Category[] = [
   {
     name: "AI & Prompt Eng",
     pages: [
+      {
+        title: "Introduction to AI",
+        path: "/ai/intro-to-ai",
+        icon: Brain,
+        accentClass: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
+        hoverAccentClass: "group-hover:text-cyan-400 group-hover:bg-cyan-500/5"
+      },
       {
         title: "Prompt Engineering",
         path: "/ai/prompt-engineering",
