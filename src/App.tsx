@@ -14,6 +14,7 @@ const DockerCompose = lazy(() => import("./pages/DockerCompose"));
 const SpanningTrees = lazy(() => import("./pages/SpanningTrees"));
 const Dijkstra = lazy(() => import("./pages/Dijkstra"));
 const QuestionGuide = lazy(() => import("./pages/QuestionGuide"));
+const PlacementRoadmap = lazy(() => import("./pages/PlacementRoadmap"));
 const JDBC = lazy(() => import("./pages/JDBC"));
 const Hibernate = lazy(() => import("./pages/Hibernate"));
 const SpringBootREST = lazy(() => import("./pages/SpringBootREST"));
@@ -99,6 +100,7 @@ function AppContent() {
                 <Route path="/dsa/kruskal-mst" element={<SpanningTrees />} />
                 <Route path="/dsa/dijkstra" element={<Dijkstra />} />
                 <Route path="/dsa/question-guide" element={<QuestionGuide />} />
+                <Route path="/dsa/placement-roadmap" element={<PlacementRoadmap />} />
                 <Route path="/java/jdbc" element={<JDBC />} />
                 <Route path="/java/hibernate" element={<Hibernate />} />
                 <Route path="/java/springboot" element={<SpringBootREST />} />

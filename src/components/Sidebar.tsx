@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   Search, BookOpen, Cpu, Terminal, GitBranch, Database, Globe, 
-  ChevronRight, RefreshCw, Layers, Route, Brain
+  ChevronRight, RefreshCw, Layers, Route, Brain, Compass
 } from "lucide-react";
 
 export interface DocPage {
@@ -81,6 +81,13 @@ export const categories: Category[] = [
         icon: BookOpen,
         accentClass: "text-violet-400 bg-violet-500/10 border-violet-500/20",
         hoverAccentClass: "group-hover:text-violet-400 group-hover:bg-violet-500/5"
+      },
+      {
+        title: "Placement Roadmap",
+        path: "/dsa/placement-roadmap",
+        icon: Compass,
+        accentClass: "text-rose-400 bg-rose-500/10 border-rose-500/20",
+        hoverAccentClass: "group-hover:text-rose-400 group-hover:bg-rose-500/5"
       }
     ]
   },
