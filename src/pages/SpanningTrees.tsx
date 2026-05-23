@@ -1,6 +1,6 @@
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Network, Play, Pause, RotateCcw, ChevronLeft, ChevronRight, Check, Code, GitFork, GitBranch, Cpu } from "lucide-react";
+import { motion } from "framer-motion";
+import { Network, Play, Pause, RotateCcw, ChevronLeft, ChevronRight, GitFork, GitBranch } from "lucide-react";
 import CodeBlock from "../components/CodeBlock";
 
 interface Edge {
@@ -48,7 +48,7 @@ export default function SpanningTrees() {
   const [currentStep, setCurrentStep] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [activeTab, setActiveTab] = useState<"python" | "java" | "cpp">("python");
-  const playIntervalRef = useRef<NodeJS.Timeout | null>(null);
+  const playIntervalRef = useRef<any>(null);
 
   useEffect(() => {
     if (isPlaying) {
@@ -241,8 +241,7 @@ export default function SpanningTrees() {
                       strokeWidth={attrs.width}
                       strokeDasharray={attrs.dasharray}
                       className={attrs.pulsing ? "animate-pulse" : ""}
-                      style={attrs.stroke === "#10b981" ? { filter: "url(#glow-emerald)" } : {}}
-                      transition="all 0.3s ease"
+                      style={{ transition: "all 0.3s ease", ...(attrs.stroke === "#10b981" ? { filter: "url(#glow-emerald)" } : {}) }}
                     />
                     {/* Weight Label Box */}
                     <g transform={`translate(${(fromNode.x + toNode.x) / 2 - 10}, ${(fromNode.y + toNode.y) / 2 - 10})`}>
@@ -265,7 +264,7 @@ export default function SpanningTrees() {
                       fill={nodeColors.fill}
                       stroke={nodeColors.stroke}
                       strokeWidth="3"
-                      transition="all 0.3s ease"
+                      style={{ transition: "all 0.3s ease" }}
                     />
                     <text
                       y="5"

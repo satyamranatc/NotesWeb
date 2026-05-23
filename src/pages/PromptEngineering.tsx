@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Cpu, Sparkles, BookOpen, Layers, Check, Copy, AlertCircle, RefreshCw, Zap } from "lucide-react";
-import CodeBlock from "../components/CodeBlock";
+import { Cpu, Sparkles, Check, Copy, Zap } from "lucide-react";
 
 export default function PromptEngineering() {
   const [activeTab, setActiveTab] = useState<"guide" | "builder">("guide");

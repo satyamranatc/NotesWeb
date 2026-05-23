@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Globe, Server, Send, Code, Database, RefreshCw, Cpu, Layers, HelpCircle } from "lucide-react";
+import { motion } from "framer-motion";
+import { Globe, Send, RefreshCw } from "lucide-react";
 import CodeBlock from "../components/CodeBlock";
 
 interface ResponseMock {
@@ -292,9 +292,9 @@ public class UserController {
           <table className="w-full text-left border-collapse bg-zinc-950/20 text-xs">
             <thead>
               <tr className="bg-zinc-900/30 border-b border-zinc-900">
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Annotation</th>
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Mapping Target</th>
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Conversion/Binding</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Annotation</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Mapping Target</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Conversion/Binding</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-900 text-zinc-400">

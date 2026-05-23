@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Zap, Database, Server, Settings, ArrowRight, Table, Columns, Layers } from "lucide-react";
+import { Zap, ArrowRight, Table, Columns } from "lucide-react";
 import CodeBlock from "../components/CodeBlock";
 
 interface Field {
@@ -32,14 +32,6 @@ export default function Hibernate() {
     setFields(fields.filter((_, i) => i !== index));
   };
 
-  const getJavaType = (type: string) => {
-    switch (type) {
-      case "int": return "int";
-      case "double": return "double";
-      case "LocalDate": return "java.time.LocalDate";
-      default: return "String";
-    }
-  };
 
   const getSqlType = (type: string) => {
     switch (type) {
@@ -297,10 +289,10 @@ public interface UserRepository extends JpaRepository<User, Integer> {
           <table className="w-full text-left border-collapse bg-zinc-950/20 text-xs">
             <thead>
               <tr className="bg-zinc-900/30 border-b border-zinc-900">
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Dimension</th>
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest text-center">JDBC</th>
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest text-center">Hibernate</th>
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest text-center">Spring Boot JPA</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Dimension</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest text-center">JDBC</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest text-center">Hibernate</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest text-center">Spring Boot JPA</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-900 text-zinc-400">

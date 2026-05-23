@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { 
   Search, BookOpen, Cpu, Terminal, GitBranch, Database, Globe, 
-  ChevronRight, RefreshCw, Layers
+  ChevronRight, RefreshCw, Layers, Route
 } from "lucide-react";
 
 export interface DocPage {
@@ -60,6 +60,20 @@ export const categories: Category[] = [
         icon: GitBranch,
         accentClass: "text-teal-400 bg-teal-500/10 border-teal-500/20",
         hoverAccentClass: "group-hover:text-teal-400 group-hover:bg-teal-500/5"
+      },
+      {
+        title: "Dijkstra's Algorithm",
+        path: "/dsa/dijkstra",
+        icon: Route,
+        accentClass: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+        hoverAccentClass: "group-hover:text-amber-400 group-hover:bg-amber-500/5"
+      },
+      {
+        title: "Interview Question Guide",
+        path: "/dsa/question-guide",
+        icon: BookOpen,
+        accentClass: "text-violet-400 bg-violet-500/10 border-violet-500/20",
+        hoverAccentClass: "group-hover:text-violet-400 group-hover:bg-violet-500/5"
       }
     ]
   },
@@ -98,6 +112,13 @@ export const categories: Category[] = [
         icon: Globe,
         accentClass: "text-emerald-400 bg-emerald-500/10 border-emerald-500/20",
         hoverAccentClass: "group-hover:text-emerald-400 group-hover:bg-emerald-500/5"
+      },
+      {
+        title: "Networking Essentials",
+        path: "/web/networking",
+        icon: Globe,
+        accentClass: "text-sky-400 bg-sky-500/10 border-sky-500/20",
+        hoverAccentClass: "group-hover:text-sky-400 group-hover:bg-sky-500/5"
       }
     ]
   },
@@ -133,18 +154,22 @@ export default function Sidebar({ onLinkClick }: SidebarProps) {
 
   return (
     <aside className="w-full md:w-80 bg-zinc-950 border-r border-zinc-900 h-full flex flex-col overflow-hidden">
-      {/* Brand Logo Header */}
-      <div className="p-6 pb-4 border-b border-zinc-900">
+      {/* Brand Logo Header — sticky so it stays pinned as nav scrolls */}
+      <div className="sticky top-0 z-10 p-6 pb-4 border-b border-zinc-900 bg-zinc-950/90 backdrop-blur-md">
         <Link to="/" onClick={onLinkClick} className="flex items-center gap-3 group">
-          <div className="w-10 h-10 bg-teal-500 rounded-xl flex items-center justify-center shadow-lg shadow-teal-500/20 group-hover:scale-105 transition-transform duration-300">
-            <BookOpen className="w-5.5 h-5.5 text-black stroke-[2.5]" />
+          <div className="w-12 h-12 border  border-zinc-800 rounded-md flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+            <img 
+              src="https://www.theprimestep.com/wp-content/uploads/2022/11/Logo_Tps-removebg-preview.png" 
+              alt="Prime Step Logo" 
+              className="w-full h-full object-cover"
+            />
           </div>
           <div>
-            <h1 className="text-zinc-100 font-extrabold text-md tracking-tight leading-none">
-              DevNotes
+            <h1 className="text-white font-extrabold text-sm tracking-tight leading-none">
+              Prime Step
             </h1>
-            <p className="text-zinc-500 text-[10px] uppercase tracking-widest mt-1.5 font-bold">
-              Personal Wiki
+            <p className="text-teal-500/70 text-[10px] uppercase tracking-widest mt-1.5 font-bold">
+              Prime Library
             </p>
           </div>
         </Link>
@@ -165,7 +190,7 @@ export default function Sidebar({ onLinkClick }: SidebarProps) {
       </div>
 
       {/* Navigation List */}
-      <div className="flex-1 overflow-y-auto px-6 py-4 space-y-6 scrollbar-thin">
+      <div className="flex-1 overflow-y-auto overscroll-contain px-6 py-4 space-y-6 scrollbar-thin">
         {filteredCategories.length > 0 ? (
           filteredCategories.map((cat, idx) => (
             <div key={idx} className="space-y-2">

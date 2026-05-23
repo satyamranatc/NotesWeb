@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Leaf, Database, Cpu, Layout, ArrowRight, Play, RefreshCw, Layers } from "lucide-react";
+import { motion } from "framer-motion";
+import { Leaf, Database, Cpu, Layout, Play, RefreshCw } from "lucide-react";
 
 export default function Django() {
   const [activeLifecycleStep, setActiveLifecycleStep] = useState(0);

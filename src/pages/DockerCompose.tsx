@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Layers, Database, Server, Globe, HelpCircle, AlertTriangle, Play, Check, ChevronRight } from "lucide-react";
+import { motion } from "framer-motion";
+import { Layers, Database, Server, Globe, AlertTriangle, ChevronRight } from "lucide-react";
 import CodeBlock from "../components/CodeBlock";
 
 export default function DockerCompose() {

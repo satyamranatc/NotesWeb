@@ -1,6 +1,6 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Database, Link, Play, RefreshCw, Layers, Check, Copy, FileCode, Shield, Terminal } from "lucide-react";
+import { motion } from "framer-motion";
+import { Database, Terminal } from "lucide-react";
 import CodeBlock from "../components/CodeBlock";
 
 export default function JDBC() {
@@ -157,8 +157,8 @@ export default function JDBC() {
           <table className="w-full text-left border-collapse bg-zinc-950/20">
             <thead>
               <tr className="bg-zinc-900/30 border-b border-zinc-900">
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Component</th>
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Role</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Component</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Role</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-900">
@@ -200,9 +200,9 @@ export default function JDBC() {
           <table className="w-full text-left border-collapse bg-zinc-950/20">
             <thead>
               <tr className="bg-zinc-900/30 border-b border-zinc-900">
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Execute Method</th>
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Query Target</th>
-                <th class="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Return Type</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Execute Method</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Query Target</th>
+                <th className="px-6 py-4 text-[10px] font-bold text-zinc-550 uppercase tracking-widest">Return Type</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-zinc-900 font-mono text-xs">

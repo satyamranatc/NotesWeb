@@ -1,7 +1,6 @@
 import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
-import { Database, HelpCircle, Columns, Table, ArrowRight, Check, Code } from "lucide-react";
-import CodeBlock from "../components/CodeBlock";
+import { motion } from "framer-motion";
+import { Database, Table, Code } from "lucide-react";
 
 interface JoinType {
   id: string;
@@ -186,7 +185,7 @@ export default function SqlJoins() {
       highlightLeft: true,
       highlightRight: false,
       highlightIntersection: true,
-      compute: (us, cs) => {
+      compute: (us, _cs) => {
         const res: any[] = [];
         for (let i = 0; i < us.length; i++) {
           for (let j = 0; j < us.length; j++) {

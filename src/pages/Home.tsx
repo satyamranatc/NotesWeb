@@ -35,7 +35,7 @@ export default function Home() {
 
   const itemVariants = {
     hidden: { opacity: 0, y: 15 },
-    visible: { opacity: 1, y: 0, transition: { type: "spring", stiffness: 300, damping: 25 } }
+    visible: { opacity: 1, y: 0, transition: { type: "spring" as const, stiffness: 300, damping: 25 } }
   };
 
   return (
@@ -43,7 +43,7 @@ export default function Home() {
       initial="hidden"
       animate="visible"
       variants={containerVariants}
-      className="max-w-5xl mx-auto px-6 py-12 md:py-20 space-y-16"
+      className="max-w-6xl mx-auto px-6 py-12 md:py-20 space-y-16"
     >
       {/* Welcome Header */}
       <motion.div variants={itemVariants} className="text-center md:text-left space-y-6">
@@ -125,45 +125,45 @@ export default function Home() {
             return (
               <motion.div key={idx} variants={itemVariants} className="h-full">
                 <CardContainer containerClassName="py-0 flex items-stretch h-full w-full">
-                  <CardBody className="bg-zinc-900/40 hover:bg-zinc-800/40 backdrop-blur-xl border border-white/5 hover:border-teal-500/20 rounded-[2rem] p-8 flex flex-col justify-between transition-all duration-500 shadow-2xl shadow-black/50 relative overflow-hidden group h-full w-full">
+                  <CardBody className="bg-zinc-900/40 hover:bg-zinc-800/40 hover:scale-[1.02] backdrop-blur-xl border border-white/5 hover:border-teal-500/20 rounded-[2rem] p-8 flex flex-col justify-between transition-all duration-500 shadow-2xl shadow-black/50 relative overflow-hidden group h-full w-full">
                     {/* Visual Accent Glow */}
-                    <CardItem translateZ="20" className={`absolute -right-8 -top-8 w-24 h-24 rounded-full filter blur-2xl opacity-10 transition-opacity group-hover:opacity-15 bg-current ${samplePage.accentClass.split(' ')[0]}`} />
+                    <CardItem translateZ="40" className={`absolute -right-8 -top-8 w-24 h-24 rounded-full filter blur-2xl opacity-10 transition-opacity group-hover:opacity-15 bg-current ${samplePage.accentClass.split(' ')[0]}`} />
 
                     <div className="space-y-6">
                       {/* Category Header */}
-                      <CardItem translateZ="40" className="flex items-center gap-3">
-                        <div className={`w-10 h-10 rounded-2xl flex items-center justify-center border border-zinc-800 ${samplePage.accentClass}`}>
+                      <CardItem translateZ="60" className="flex items-center gap-3">
+                        <div className={`w-11 h-11 rounded-2xl flex items-center justify-center border border-zinc-800 ${samplePage.accentClass}`}>
                           <CatIcon className="w-5 h-5" />
                         </div>
-                        <h3 className="text-white font-bold text-sm tracking-tight">
+                        <h3 className="text-white font-bold text-base tracking-tight">
                           {cat.name}
                         </h3>
                       </CardItem>
 
                       {/* Category Pages */}
-                      <CardItem translateZ="30" className="space-y-2.5 w-full">
+                      <CardItem translateZ="45" className="space-y-2.5 w-full">
                         {cat.pages.map((page, pIdx) => {
                           const PageIcon = page.icon;
                           return (
                             <Link
                               key={pIdx}
                               to={page.path}
-                              className="flex items-center justify-between p-2.5 rounded-xl hover:bg-zinc-950/60 border border-transparent hover:border-zinc-900 text-zinc-400 hover:text-zinc-200 text-xs font-semibold tracking-wide transition-all"
+                              className="flex items-center justify-between p-2.5 rounded-xl hover:bg-zinc-950/60 border border-transparent hover:border-zinc-900 text-zinc-400 hover:text-zinc-200 text-sm font-semibold tracking-wide transition-all"
                             >
                               <span className="flex items-center gap-2">
-                                <PageIcon className="w-3.5 h-3.5 text-zinc-550" />
+                                <PageIcon className="w-4 h-4 text-zinc-550" />
                                 {page.title}
                               </span>
-                              <ChevronRight className="w-3 h-3 text-zinc-600" />
+                              <ChevronRight className="w-3.5 h-3.5 text-zinc-650" />
                             </Link>
                           );
                         })}
                       </CardItem>
                     </div>
 
-                    <CardItem translateZ="20" className="mt-8 w-full pt-4 border-t border-zinc-900/80 flex items-center justify-between text-[9px] font-bold text-zinc-500 uppercase tracking-widest">
-                      <span className="flex items-center gap-1"><Tag className="w-3 h-3 text-zinc-500" /> {cat.pages.length} Pages</span>
-                      <span className="flex items-center gap-1"><Clock className="w-3 h-3 text-zinc-500" /> updated</span>
+                    <CardItem translateZ="30" className="mt-8 w-full pt-4 border-t border-zinc-900/80 flex items-center justify-between text-[10px] font-bold text-zinc-500 uppercase tracking-widest">
+                      <span className="flex items-center gap-1"><Tag className="w-3.5 h-3.5 text-zinc-500" /> {cat.pages.length} Pages</span>
+                      <span className="flex items-center gap-1"><Clock className="w-3.5 h-3.5 text-zinc-500" /> updated</span>
                     </CardItem>
                   </CardBody>
                 </CardContainer>

@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
-import { Terminal, Layers, Server, Shield, Check, Copy, HelpCircle, HardDrive, Cpu } from "lucide-react";
+import { Terminal, Shield, Check, Copy, HardDrive } from "lucide-react";
 import CodeBlock from "../components/CodeBlock";
 
 export default function Docker() {
@@ -145,7 +145,7 @@ CMD ["npm", "start"]`}
           <div className="p-5 bg-[#0b0c10] border border-zinc-900 rounded-xl space-y-2">
             <span className="px-2 py-0.5 bg-zinc-800 text-[10px] text-zinc-300 font-mono font-bold rounded">RUN vs CMD</span>
             <p className="text-xs text-zinc-500 font-light leading-relaxed">
-              <code className="text-blue-400">RUN</code> executes while the image builds (e.g. compiling binary code, installing dependencies). <code class="text-blue-400">CMD</code> sets the default runtime execute command.
+              <code className="text-blue-400">RUN</code> executes while the image builds (e.g. compiling binary code, installing dependencies). <code className="text-blue-400">CMD</code> sets the default runtime execute command.
             </p>
           </div>
           <div className="p-5 bg-[#0b0c10] border border-zinc-900 rounded-xl space-y-2">
