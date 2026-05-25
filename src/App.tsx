@@ -21,6 +21,7 @@ const SpringBootREST = lazy(() => import("./pages/SpringBootREST"));
 const Django = lazy(() => import("./pages/Django"));
 const Networking = lazy(() => import("./pages/Networking"));
 const SqlJoins = lazy(() => import("./pages/SqlJoins"));
+const BackendApiTheory = lazy(() => import("./pages/BackendApiTheory"));
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -106,6 +107,7 @@ function AppContent() {
                 <Route path="/java/springboot" element={<SpringBootREST />} />
                 <Route path="/web/django" element={<Django />} />
                 <Route path="/web/networking" element={<Networking />} />
+                <Route path="/web/backend-api-theory" element={<BackendApiTheory />} />
                 <Route path="/sql/joins" element={<SqlJoins />} />
               </Routes>
             </Suspense>

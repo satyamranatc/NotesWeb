@@ -133,6 +133,13 @@ export const categories: Category[] = [
         icon: Globe,
         accentClass: "text-sky-400 bg-sky-500/10 border-sky-500/20",
         hoverAccentClass: "group-hover:text-sky-400 group-hover:bg-sky-500/5"
+      },
+      {
+        title: "Backend & API Theory",
+        path: "/web/backend-api-theory",
+        icon: Globe,
+        accentClass: "text-violet-400 bg-violet-500/10 border-violet-500/20",
+        hoverAccentClass: "group-hover:text-violet-400 group-hover:bg-violet-500/5"
       }
     ]
   },
