@@ -22,6 +22,7 @@ const Django = lazy(() => import("./pages/Django"));
 const Networking = lazy(() => import("./pages/Networking"));
 const SqlJoins = lazy(() => import("./pages/SqlJoins"));
 const BackendApiTheory = lazy(() => import("./pages/BackendApiTheory"));
+const SE_Industry = lazy(() => import("./pages/SE_Industry"));
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -36,6 +37,7 @@ const LoadingFallback = () => (
 function AppContent() {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     if (mobileMenuOpen) {
@@ -53,8 +55,10 @@ function AppContent() {
       <ScrollToTop />
 
       {/* Desktop Sidebar (Always Visible) */}
-      <div className="hidden md:block w-80 fixed top-0 left-0 h-screen overflow-hidden z-20">
-        <Sidebar />
+      <div className={`hidden md:block fixed top-0 left-0 h-screen overflow-hidden z-20 transition-all duration-300 ${
+        isCollapsed ? "w-20" : "w-80"
+      }`}>
+        <Sidebar isCollapsed={isCollapsed} onToggleCollapse={() => setIsCollapsed(!isCollapsed)} />
       </div>
 
       {/* Mobile Navbar Header */}
@@ -88,7 +92,9 @@ function AppContent() {
       </AnimatePresence>
 
       {/* Main content body wrap */}
-      <main className="flex-1 md:pl-80 min-h-[calc(100vh-73px)] md:min-h-screen flex flex-col justify-between">
+      <main className={`flex-1 min-h-[calc(100vh-73px)] md:min-h-screen flex flex-col justify-between transition-all duration-300 ${
+        isCollapsed ? "md:pl-20" : "md:pl-80"
+      }`}>
         <div className="flex-1 w-full">
           <AnimatePresence mode="wait">
             <Suspense fallback={<LoadingFallback />}>
@@ -108,6 +114,7 @@ function AppContent() {
                 <Route path="/web/django" element={<Django />} />
                 <Route path="/web/networking" element={<Networking />} />
                 <Route path="/web/backend-api-theory" element={<BackendApiTheory />} />
+                <Route path="/web/se-industry" element={<SE_Industry />} />
                 <Route path="/sql/joins" element={<SqlJoins />} />
               </Routes>
             </Suspense>

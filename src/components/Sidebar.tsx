@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { 
   Search, BookOpen, Cpu, Terminal, GitBranch, Database, Globe, 
-  ChevronRight, RefreshCw, Layers, Route, Brain, Compass
+  ChevronRight, ChevronLeft, RefreshCw, Layers, Route, Brain, Compass
 } from "lucide-react";
 
 export interface DocPage {
@@ -140,6 +140,13 @@ export const categories: Category[] = [
         icon: Globe,
         accentClass: "text-violet-400 bg-violet-500/10 border-violet-500/20",
         hoverAccentClass: "group-hover:text-violet-400 group-hover:bg-violet-500/5"
+      },
+      {
+        title: "SE & Industry Lifecycle",
+        path: "/web/se-industry",
+        icon: Layers,
+        accentClass: "text-teal-400 bg-teal-500/10 border-teal-500/20",
+        hoverAccentClass: "group-hover:text-teal-400 group-hover:bg-teal-500/5"
       }
     ]
   },
@@ -159,9 +166,11 @@ export const categories: Category[] = [
 
 interface SidebarProps {
   onLinkClick?: () => void;
+  isCollapsed?: boolean;
+  onToggleCollapse?: () => void;
 }
 
-export default function Sidebar({ onLinkClick }: SidebarProps) {
+export default function Sidebar({ onLinkClick, isCollapsed = false, onToggleCollapse }: SidebarProps) {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
 
@@ -174,50 +183,85 @@ export default function Sidebar({ onLinkClick }: SidebarProps) {
   }).filter(cat => cat.pages.length > 0);
 
   return (
-    <aside className="w-full md:w-80 bg-zinc-950 border-r border-zinc-900 h-full flex flex-col overflow-hidden">
+    <aside className="w-full bg-zinc-950 border-r border-zinc-900 h-full flex flex-col overflow-hidden">
       {/* Brand Logo Header — sticky so it stays pinned as nav scrolls */}
-      <div className="sticky top-0 z-10 p-6 pb-4 border-b border-zinc-900 bg-zinc-950/90 backdrop-blur-md">
+      <div className={`sticky top-0 z-10 border-b border-zinc-900 bg-zinc-950/90 backdrop-blur-md transition-all duration-300 ${
+        isCollapsed ? "p-3 py-4 flex flex-col items-center gap-4" : "p-6 pb-4 flex items-center justify-between"
+      }`}>
         <Link to="/" onClick={onLinkClick} className="flex items-center gap-3 group">
-          <div className="w-12 h-12 border  border-zinc-800 rounded-md flex items-center justify-center group-hover:scale-105 transition-transform duration-300">
+          <div className="w-12 h-12 border border-zinc-800 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300 shrink-0">
             <img 
               src="https://www.theprimestep.com/wp-content/uploads/2022/11/Logo_Tps-removebg-preview.png" 
               alt="Prime Step Logo" 
               className="w-full h-full object-cover"
             />
           </div>
-          <div>
-            <h1 className="text-white font-extrabold text-sm tracking-tight leading-none">
-              Prime Step
-            </h1>
-            <p className="text-teal-500/70 text-[10px] uppercase tracking-widest mt-1.5 font-bold">
-              Prime Library
-            </p>
-          </div>
+          {!isCollapsed && (
+            <motion.div
+              initial={{ opacity: 0, x: -10 }}
+              animate={{ opacity: 1, x: 0 }}
+              className="whitespace-nowrap"
+            >
+              <h1 className="text-white font-extrabold text-sm tracking-tight leading-none">
+                Prime Step
+              </h1>
+              <p className="text-teal-500/70 text-[10px] uppercase tracking-widest mt-1.5 font-bold">
+                Prime Library
+              </p>
+            </motion.div>
+          )}
         </Link>
+
+        {onToggleCollapse && (
+          <button
+            onClick={onToggleCollapse}
+            className="hidden md:flex w-8 h-8 rounded-lg items-center justify-center border border-zinc-850 hover:border-zinc-700 bg-zinc-900/50 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-200 transition-all cursor-pointer shrink-0"
+          >
+            {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
+          </button>
+        )}
       </div>
 
       {/* Search Input */}
-      <div className="px-6 py-4">
-        <div className="relative group">
-          <Search className="absolute left-3.5 top-3 w-4 h-4 text-zinc-500 group-focus-within:text-teal-400 transition-colors" />
-          <input
-            type="text"
-            placeholder="Search wiki pages..."
-            value={searchQuery}
-            onChange={(e) => setSearchQuery(e.target.value)}
-            className="w-full bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800 focus:border-zinc-700 focus:outline-none rounded-xl pl-10 pr-4 py-2.5 text-sm text-zinc-200 placeholder-zinc-500 transition-all font-medium"
-          />
+      {!isCollapsed ? (
+        <div className="px-6 py-4">
+          <div className="relative group">
+            <Search className="absolute left-3.5 top-3 w-4 h-4 text-zinc-500 group-focus-within:text-teal-400 transition-colors" />
+            <input
+              type="text"
+              placeholder="Search wiki pages..."
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="w-full bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800 focus:border-zinc-700 focus:outline-none rounded-xl pl-10 pr-4 py-2.5 text-sm text-zinc-200 placeholder-zinc-500 transition-all font-medium"
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="px-3 py-4 flex justify-center">
+          <button 
+            onClick={onToggleCollapse}
+            className="p-2.5 rounded-xl bg-zinc-900/40 border border-zinc-850 text-zinc-500 hover:text-zinc-300 transition-all cursor-pointer"
+            title="Expand Sidebar"
+          >
+            <Search className="w-4 h-4" />
+          </button>
+        </div>
+      )}
 
       {/* Navigation List */}
-      <div className="flex-1 overflow-y-auto overscroll-contain px-6 py-4 space-y-6 scrollbar-thin">
+      <div className={`flex-1 overflow-y-auto overscroll-contain space-y-6 scrollbar-thin ${
+        isCollapsed ? "px-3 py-4" : "px-6 py-4"
+      }`}>
         {filteredCategories.length > 0 ? (
           filteredCategories.map((cat, idx) => (
             <div key={idx} className="space-y-2">
-              <h2 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-3">
-                {cat.name}
-              </h2>
+              {!isCollapsed ? (
+                <h2 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-3">
+                  {cat.name}
+                </h2>
+              ) : (
+                <div className="h-px bg-zinc-900 my-4" />
+              )}
               <div className="space-y-1">
                 {cat.pages.map((page, pageIdx) => {
                   const PageIcon = page.icon;
@@ -228,7 +272,9 @@ export default function Sidebar({ onLinkClick }: SidebarProps) {
                       key={pageIdx}
                       to={page.path}
                       onClick={onLinkClick}
-                      className={`group relative flex items-center justify-between px-3.5 py-2.5 rounded-xl text-sm font-medium transition-all ${
+                      className={`group relative flex items-center rounded-xl text-sm font-medium transition-all ${
+                        isCollapsed ? "justify-center p-2.5" : "justify-between px-3.5 py-2.5"
+                      } ${
                         isActive 
                           ? "text-zinc-100 font-semibold" 
                           : "text-zinc-400 hover:text-zinc-100"
@@ -243,7 +289,7 @@ export default function Sidebar({ onLinkClick }: SidebarProps) {
                         />
                       )}
 
-                      <div className="flex items-center gap-3 z-10">
+                      <div className={`flex items-center z-10 ${isCollapsed ? "justify-center" : "gap-3"}`}>
                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center border border-transparent transition-colors ${
                           isActive 
                             ? page.accentClass
@@ -251,12 +297,21 @@ export default function Sidebar({ onLinkClick }: SidebarProps) {
                         }`}>
                           <PageIcon className="w-4.5 h-4.5" />
                         </div>
-                        <span>{page.title}</span>
+                        {!isCollapsed && <span>{page.title}</span>}
                       </div>
 
-                      <ChevronRight className={`w-3.5 h-3.5 text-zinc-650 transition-transform ${
-                        isActive ? "translate-x-0.5 opacity-100 text-zinc-400" : "opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"
-                      } z-10`} />
+                      {!isCollapsed && (
+                        <ChevronRight className={`w-3.5 h-3.5 text-zinc-650 transition-transform ${
+                          isActive ? "translate-x-0.5 opacity-100 text-zinc-400" : "opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"
+                        } z-10`} />
+                      )}
+
+                      {/* CSS hover tooltip */}
+                      {isCollapsed && (
+                        <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-zinc-950 border border-zinc-850 text-zinc-200 text-xs font-bold rounded-lg shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 pointer-events-none transition-all duration-200 z-50">
+                          {page.title}
+                        </div>
+                      )}
                     </Link>
                   );
                 })}
@@ -265,18 +320,27 @@ export default function Sidebar({ onLinkClick }: SidebarProps) {
           ))
         ) : (
           <div className="text-center py-8">
-            <p className="text-zinc-500 text-sm">No pages found matching query.</p>
+            <p className="text-zinc-500 text-sm">
+              {!isCollapsed ? "No pages found matching query." : "empty"}
+            </p>
           </div>
         )}
       </div>
 
       {/* Footer Info */}
-      <div className="p-6 border-t border-zinc-900 bg-zinc-950">
-        <div className="flex items-center justify-between text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
-          <span>v3.0.0 (React)</span>
-          <RefreshCw className="w-3.5 h-3.5 hover:rotate-180 transition-transform duration-500 cursor-pointer" />
+      {!isCollapsed ? (
+        <div className="p-6 border-t border-zinc-900 bg-zinc-950">
+          <div className="flex items-center justify-between text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
+            <span>v3.0.0 (React)</span>
+            <RefreshCw className="w-3.5 h-3.5 hover:rotate-180 transition-transform duration-500 cursor-pointer" />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="p-4 py-6 border-t border-zinc-900 bg-zinc-950 flex flex-col items-center gap-3">
+          <RefreshCw className="w-4 h-4 text-zinc-650 hover:text-zinc-400 hover:rotate-180 transition-transform duration-500 cursor-pointer" />
+          <span className="text-zinc-700 text-[9px] font-bold">v3</span>
+        </div>
+      )}
     </aside>
   );
 }
