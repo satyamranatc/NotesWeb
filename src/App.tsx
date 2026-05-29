@@ -9,6 +9,7 @@ import ScrollToTop from "./components/ScrollToTop";
 const Home = lazy(() => import("./pages/Home"));
 const IntroToAI = lazy(() => import("./pages/IntroToAI"));
 const PromptEngineering = lazy(() => import("./pages/PromptEngineering"));
+const MlInterviewGuide = lazy(() => import("./pages/MlInterviewGuide"));
 const Docker = lazy(() => import("./pages/Docker"));
 const DockerCompose = lazy(() => import("./pages/DockerCompose"));
 const SpanningTrees = lazy(() => import("./pages/SpanningTrees"));
@@ -23,6 +24,9 @@ const Networking = lazy(() => import("./pages/Networking"));
 const SqlJoins = lazy(() => import("./pages/SqlJoins"));
 const BackendApiTheory = lazy(() => import("./pages/BackendApiTheory"));
 const SE_Industry = lazy(() => import("./pages/SE_Industry"));
+const UberSystemDesign = lazy(() => import("./pages/UberSystemDesign"));
+const ZomatoSystemDesign = lazy(() => import("./pages/ZomatoSystemDesign"));
+
 
 // Loading fallback component
 const LoadingFallback = () => (
@@ -51,7 +55,7 @@ function AppContent() {
   }, [mobileMenuOpen]);
 
   return (
-    <div className="flex flex-col md:flex-row min-h-screen bg-black text-zinc-300 font-sans antialiased overflow-x-hidden">
+    <div className="flex flex-col md:flex-row min-h-screen bg-stone-50 text-stone-900 font-sans antialiased overflow-x-hidden">
       <ScrollToTop />
 
       {/* Desktop Sidebar (Always Visible) */}
@@ -95,13 +99,14 @@ function AppContent() {
       <main className={`flex-1 min-h-[calc(100vh-73px)] md:min-h-screen flex flex-col justify-between transition-all duration-300 ${
         isCollapsed ? "md:pl-20" : "md:pl-80"
       }`}>
-        <div className="flex-1 w-full">
+        <div className="flex-1 w-full notes-container">
           <AnimatePresence mode="wait">
             <Suspense fallback={<LoadingFallback />}>
               <Routes location={location} key={location.pathname}>
                 <Route path="/" element={<Home />} />
                 <Route path="/ai/intro-to-ai" element={<IntroToAI />} />
                 <Route path="/ai/prompt-engineering" element={<PromptEngineering />} />
+                <Route path="/ai/ml-interview-guide" element={<MlInterviewGuide />} />
                 <Route path="/devops/docker" element={<Docker />} />
                 <Route path="/devops/docker-compose" element={<DockerCompose />} />
                 <Route path="/dsa/kruskal-mst" element={<SpanningTrees />} />
@@ -116,6 +121,8 @@ function AppContent() {
                 <Route path="/web/backend-api-theory" element={<BackendApiTheory />} />
                 <Route path="/web/se-industry" element={<SE_Industry />} />
                 <Route path="/sql/joins" element={<SqlJoins />} />
+                <Route path="/system-design/uber" element={<UberSystemDesign />} />
+                <Route path="/system-design/zomato" element={<ZomatoSystemDesign />} />
               </Routes>
             </Suspense>
           </AnimatePresence>

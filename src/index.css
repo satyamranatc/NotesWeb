@@ -4,9 +4,19 @@
 
 @layer base {
   body {
-    @apply bg-zinc-950 text-zinc-300 antialiased selection:bg-teal-500/30 selection:text-teal-200;
+    @apply bg-stone-50 text-stone-900 antialiased selection:bg-teal-100 selection:text-teal-900;
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
   }
+}
+
+/* ==========================================================================
+   PREMIUM WHITE THEME OVERRIDES (LIBRARY CORE SYSTEM)
+   ========================================================================== */
+
+/* 1. Base Styles & Body Canvas */
+body {
+  background-color: #FAF8F5 !important; /* Warm paper / library cream */
+  color: #1C1917 !important; /* Stone-900 deep charcoal */
 }
 
 /* Custom Scrollbars */
@@ -15,14 +25,14 @@
   height: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: theme('colors.zinc.950');
+  background: #FAF8F5 !important;
 }
 ::-webkit-scrollbar-thumb {
-  background: theme('colors.zinc.800');
+  background: #D6D3D1 !important; /* Stone-300 */
   border-radius: 9999px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: theme('colors.zinc.700');
+  background: #A8A29E !important; /* Stone-400 */
 }
 
 /* Hide scrollbars for specific containers */
@@ -45,10 +55,243 @@
   animation: pulse-edge 1.5s infinite;
 }
 
-/* Glassmorphism Styles */
-.glass-panel {
-  @apply bg-zinc-900/40 backdrop-blur-md border border-zinc-800/60;
+/* Selection Overrides */
+::selection {
+  background-color: #E2E8F0 !important;
+  color: #0F172A !important;
 }
+
+/* 2. Layout & Card Background Overrides */
+.bg-black,
+.bg-zinc-950,
+.bg-\[\#09090b\],
+.bg-\[\#070708\] {
+  background-color: #FFFFFF !important; /* Pure white containers */
+}
+
+.bg-zinc-900,
+.bg-zinc-900\/30,
+.bg-zinc-900\/40,
+.bg-zinc-950\/20,
+.bg-zinc-950\/30,
+.bg-zinc-950\/40,
+.bg-zinc-950\/60,
+.bg-zinc-950\/80,
+.bg-zinc-950\/90,
+.bg-zinc-950\/95,
+.bg-black\/20,
+.bg-black\/30,
+.bg-black\/40,
+.bg-black\/60 {
+  background-color: #FCFAF7 !important; /* Soft library-paper tint */
+}
+
+/* Layout Header (Blur Overlays) */
 .glass-header {
-  @apply sticky top-0 z-40 bg-zinc-950/60 backdrop-blur-md border-b border-zinc-900;
+  background-color: rgba(255, 255, 255, 0.8) !important;
+  border-bottom: 1px solid #E7E5E4 !important;
+  backdrop-filter: blur(12px) !important;
+}
+
+/* Sidebar and general glass panel overlays */
+.glass-panel {
+  background-color: rgba(255, 255, 255, 0.7) !important;
+  border: 1px solid #E7E5E4 !important;
+  box-shadow: 0 4px 20px -2px rgba(28, 25, 23, 0.04) !important;
+}
+
+/* 3. Borders Overrides (Soft Stone Gray) */
+.border-zinc-900,
+.border-zinc-900\/40,
+.border-zinc-900\/50,
+.border-zinc-900\/60,
+.border-zinc-850,
+.border-zinc-800,
+.border-zinc-800\/60,
+.border-zinc-800\/80,
+.border-zinc-700,
+.border-transparent {
+  border-color: #E7E5E4 !important; /* Stone-200 border */
+}
+
+/* 4. Text Color Overrides */
+.text-white {
+  color: #1C1917 !important; /* Deep charcoal */
+}
+.text-zinc-100,
+.text-zinc-150,
+.text-zinc-200 {
+  color: #292524 !important; /* Stone-800 */
+}
+.text-zinc-300,
+.text-zinc-400 {
+  color: #44403C !important; /* Stone-700 */
+}
+.text-zinc-450,
+.text-zinc-500 {
+  color: #57534E !important; /* Stone-600 */
+}
+.text-zinc-555,
+.text-zinc-550,
+.text-zinc-600,
+.text-zinc-650 {
+  color: #78716C !important; /* Stone-500 */
+}
+.text-zinc-700,
+.text-zinc-750,
+.text-zinc-800 {
+  color: #A8A29E !important; /* Stone-400 */
+}
+
+/* Hover and Link State Overrides */
+.hover\:bg-zinc-900\/20:hover,
+.hover\:bg-zinc-900\/35:hover,
+.hover\:bg-zinc-900\/40:hover,
+.hover\:bg-zinc-900\/50:hover,
+.hover\:bg-zinc-900\/60:hover,
+.hover\:bg-zinc-950\/40:hover,
+.hover\:bg-zinc-950\/60:hover {
+  background-color: #F5F5F4 !important; /* Stone-100 */
+}
+
+/* Sidebar and Navigation Drawer specific overrides */
+aside {
+  background-color: #FCFAF7 !important;
+  border-right: 1px solid #E7E5E4 !important;
+}
+aside .bg-zinc-900\/30,
+aside .bg-zinc-900\/20 {
+  background-color: #F5F5F4 !important;
+  border-color: #E7E5E4 !important;
+}
+aside .bg-zinc-900\/40 {
+  background-color: #F5F5F4 !important;
+  border-color: #D6D3D1 !important;
+}
+
+/* Loader Backdrop Fallbacks */
+.bg-black.flex.items-center.justify-center.min-h-\[60vh\] {
+  background-color: #FAF8F5 !important;
+}
+.border-zinc-800 {
+  border-color: #E7E5E4 !important;
+}
+
+/* Glow Backgrounds Opacity Adjustments for Light Mode */
+.from-teal-500\/5, .bg-teal-500\/5 {
+  --tw-gradient-from: rgba(13, 148, 136, 0.02) !important;
+}
+.bg-teal-500\/10 {
+  background-color: rgba(13, 148, 136, 0.06) !important;
+}
+.from-indigo-500\/5, .bg-indigo-500\/5 {
+  --tw-gradient-from: rgba(99, 102, 241, 0.02) !important;
+}
+
+/* 5. Typography System for Notes & Curated Content */
+.notes-container {
+  font-family: 'Lora', 'Georgia', serif;
+  font-size: 1.05rem;
+  line-height: 1.65;
+  color: #292524;
+}
+
+.notes-container h1 {
+  font-family: 'Playfair Display', 'Lora', serif !important;
+  font-weight: 800;
+  color: #1C1917 !important;
+  font-size: 2.5rem;
+  line-height: 1.15;
+  letter-spacing: -0.02em;
+}
+
+.notes-container h2 {
+  font-family: 'Playfair Display', 'Lora', serif !important;
+  font-weight: 700;
+  color: #1C1917 !important;
+  font-size: 1.75rem;
+  line-height: 1.25;
+  letter-spacing: -0.015em;
+  border-bottom: 1px solid rgba(231, 229, 228, 0.6);
+  padding-bottom: 0.5rem;
+  margin-top: 2.5rem;
+}
+
+.notes-container h3 {
+  font-family: 'Playfair Display', 'Lora', serif !important;
+  font-weight: 700;
+  color: #1C1917 !important;
+  font-size: 1.35rem;
+  line-height: 1.3;
+  margin-top: 2rem;
+}
+
+.notes-container h4 {
+  font-family: 'Playfair Display', 'Lora', serif !important;
+  font-weight: 600;
+  color: #292524 !important;
+  font-size: 1.15rem;
+  line-height: 1.3;
+}
+
+.notes-container p, 
+.notes-container li {
+  font-family: 'Lora', 'Georgia', serif;
+  color: #292524 !important;
+}
+
+.notes-container blockquote {
+  font-family: 'Lora', 'Georgia', serif;
+  font-style: italic;
+  border-left: 4px solid #D6D3D1;
+  padding-left: 1.25rem;
+  color: #57534E !important;
+  background-color: #FCFAF7;
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  margin: 1.5rem 0;
+}
+
+/* Reset widgets to elegant sans-serif inside Notes */
+.notes-container button,
+.notes-container input,
+.notes-container select,
+.notes-container .font-sans,
+.notes-container a {
+  font-family: 'Inter', -apple-system, sans-serif !important;
+}
+
+/* Preserve Mono layouts inside Notes code blocks */
+.notes-container code,
+.notes-container pre,
+.notes-container .font-mono {
+  font-family: 'JetBrains Mono', 'Fira Code', monospace !important;
+  font-size: 0.875rem !important;
+}
+
+/* Keep code panels dark for readable syntax coloring contrast */
+pre,
+pre.bg-black,
+pre.bg-zinc-950,
+pre.bg-\[\#09090b\],
+.notes-container pre {
+  background-color: #1E1E1E !important; /* Classic VS Dark style */
+  color: #E2E8F0 !important;
+  border: 1px solid #2D3748 !important;
+  border-radius: 0.75rem !important;
+  padding: 1.25rem !important;
+}
+
+pre code,
+.notes-container pre code {
+  background-color: transparent !important;
+  color: inherit !important;
+  font-size: 0.825rem !important;
+}
+
+/* Keep interactive simulator nodes correctly centered and styled */
+.notes-container svg,
+.notes-container svg text {
+  font-family: 'Inter', sans-serif !important;
 }

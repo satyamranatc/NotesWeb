@@ -9,6 +9,8 @@ export default {
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
         mono: ['JetBrains Mono', 'Fira Code', 'monospace'],
+        serif: ['Lora', 'Georgia', 'serif'],
+        display: ['Playfair Display', 'serif'],
       },
     },
   },

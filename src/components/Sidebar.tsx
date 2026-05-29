@@ -1,9 +1,10 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import { 
   Search, BookOpen, Cpu, Terminal, GitBranch, Database, Globe, 
-  ChevronRight, ChevronLeft, RefreshCw, Layers, Route, Brain, Compass
+  ChevronRight, ChevronLeft, RefreshCw, Layers, Route, Brain, Compass,
+  ChevronDown, ShoppingBag
 } from "lucide-react";
 
 export interface DocPage {
@@ -12,6 +13,7 @@ export interface DocPage {
   icon: any;
   accentClass: string;
   hoverAccentClass: string;
+  badge?: string;
 }
 
 export interface Category {
@@ -21,7 +23,7 @@ export interface Category {
 
 export const categories: Category[] = [
   {
-    name: "AI & Prompt Eng",
+    name: "AI & Machine Learning",
     pages: [
       {
         title: "Introduction to AI",
@@ -36,6 +38,14 @@ export const categories: Category[] = [
         icon: Cpu,
         accentClass: "text-indigo-400 bg-indigo-500/10 border-indigo-500/20",
         hoverAccentClass: "group-hover:text-indigo-400 group-hover:bg-indigo-500/5"
+      },
+      {
+        title: "ML Interview Guide",
+        path: "/ai/ml-interview-guide",
+        icon: BookOpen,
+        accentClass: "text-violet-400 bg-violet-500/10 border-violet-500/20",
+        hoverAccentClass: "group-hover:text-violet-400 group-hover:bg-violet-500/5",
+        badge: "New"
       }
     ]
   },
@@ -73,7 +83,8 @@ export const categories: Category[] = [
         path: "/dsa/dijkstra",
         icon: Route,
         accentClass: "text-amber-400 bg-amber-500/10 border-amber-500/20",
-        hoverAccentClass: "group-hover:text-amber-400 group-hover:bg-amber-500/5"
+        hoverAccentClass: "group-hover:text-amber-400 group-hover:bg-amber-500/5",
+        badge: "Interactive"
       },
       {
         title: "Interview Question Guide",
@@ -151,6 +162,26 @@ export const categories: Category[] = [
     ]
   },
   {
+    name: "System Design",
+    pages: [
+      {
+        title: "Uber System Design",
+        path: "/system-design/uber",
+        icon: Route,
+        accentClass: "text-blue-400 bg-blue-500/10 border-blue-500/20",
+        hoverAccentClass: "group-hover:text-blue-400 group-hover:bg-blue-500/5"
+      },
+      {
+        title: "Zomato System Design",
+        path: "/system-design/zomato",
+        icon: ShoppingBag,
+        accentClass: "text-rose-500 bg-rose-500/10 border-rose-500/20",
+        hoverAccentClass: "group-hover:text-rose-500 group-hover:bg-rose-500/5",
+        badge: "Interactive"
+      }
+    ]
+  },
+  {
     name: "SQL Folder",
     pages: [
       {
@@ -158,7 +189,8 @@ export const categories: Category[] = [
         path: "/sql/joins",
         icon: Database,
         accentClass: "text-cyan-400 bg-cyan-500/10 border-cyan-500/20",
-        hoverAccentClass: "group-hover:text-cyan-400 group-hover:bg-cyan-500/5"
+        hoverAccentClass: "group-hover:text-cyan-400 group-hover:bg-cyan-500/5",
+        badge: "Interactive"
       }
     ]
   }
@@ -173,6 +205,24 @@ interface SidebarProps {
 export default function Sidebar({ onLinkClick, isCollapsed = false, onToggleCollapse }: SidebarProps) {
   const location = useLocation();
   const [searchQuery, setSearchQuery] = useState("");
+  
+  // Persist collapsible categories in LocalStorage
+  const [collapsedCategories, setCollapsedCategories] = useState<Record<string, boolean>>(() => {
+    try {
+      const saved = localStorage.getItem("sidebar_collapsed_categories");
+      return saved ? JSON.parse(saved) : {};
+    } catch {
+      return {};
+    }
+  });
+
+  const toggleCategory = (catName: string) => {
+    setCollapsedCategories(prev => {
+      const next = { ...prev, [catName]: !prev[catName] };
+      localStorage.setItem("sidebar_collapsed_categories", JSON.stringify(next));
+      return next;
+    });
+  };
 
   // Filter categories and pages based on query
   const filteredCategories = categories.map(cat => {
@@ -183,64 +233,64 @@ export default function Sidebar({ onLinkClick, isCollapsed = false, onToggleColl
   }).filter(cat => cat.pages.length > 0);
 
   return (
-    <aside className="w-full bg-zinc-950 border-r border-zinc-900 h-full flex flex-col overflow-hidden">
-      {/* Brand Logo Header — sticky so it stays pinned as nav scrolls */}
-      <div className={`sticky top-0 z-10 border-b border-zinc-900 bg-zinc-950/90 backdrop-blur-md transition-all duration-300 ${
+    <aside className="w-full bg-zinc-950/80 backdrop-blur-xl border-r border-zinc-900/60 h-full flex flex-col overflow-hidden">
+      {/* Brand Logo Header */}
+      <div className={`sticky top-0 z-10 border-b border-zinc-900/60 bg-zinc-950/90 backdrop-blur-md transition-all duration-300 ${
         isCollapsed ? "p-3 py-4 flex flex-col items-center gap-4" : "p-6 pb-4 flex items-center justify-between"
       }`}>
-        <Link to="/" onClick={onLinkClick} className="flex items-center gap-3 group">
-          <div className="w-12 h-12 border border-zinc-800 rounded-xl flex items-center justify-center group-hover:scale-105 transition-transform duration-300 shrink-0">
-            <img 
-              src="https://www.theprimestep.com/wp-content/uploads/2022/11/Logo_Tps-removebg-preview.png" 
-              alt="Prime Step Logo" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-          {!isCollapsed && (
-            <motion.div
-              initial={{ opacity: 0, x: -10 }}
-              animate={{ opacity: 1, x: 0 }}
-              className="whitespace-nowrap"
-            >
-              <h1 className="text-white font-extrabold text-sm tracking-tight leading-none">
-                Prime Step
-              </h1>
-              <p className="text-teal-500/70 text-[10px] uppercase tracking-widest mt-1.5 font-bold">
-                Prime Library
-              </p>
-            </motion.div>
-          )}
-        </Link>
+          <Link to="/" onClick={onLinkClick} className="flex items-center gap-3 group">
+            <div className="w-10 h-10 border border-zinc-900/80 rounded-xl flex items-center justify-center bg-zinc-900/30 group-hover:scale-105 group-hover:border-teal-500/30 transition-all duration-300 shrink-0 shadow-inner">
+              <img 
+                src="https://www.theprimestep.com/wp-content/uploads/2022/11/Logo_Tps-removebg-preview.png" 
+                alt="Prime Step Logo" 
+                className="w-7 h-7 object-contain"
+              />
+            </div>
+            {!isCollapsed && (
+              <motion.div
+                initial={{ opacity: 0, x: -10 }}
+                animate={{ opacity: 1, x: 0 }}
+                className="whitespace-nowrap"
+              >
+                <h1 className="text-white font-extrabold text-xs tracking-tight leading-none">
+                  Prime Step
+                </h1>
+                <p className="text-teal-500/70 text-[9px] uppercase tracking-widest mt-1.5 font-bold">
+                  Prime Library
+                </p>
+              </motion.div>
+            )}
+          </Link>
 
-        {onToggleCollapse && (
-          <button
-            onClick={onToggleCollapse}
-            className="hidden md:flex w-8 h-8 rounded-lg items-center justify-center border border-zinc-850 hover:border-zinc-700 bg-zinc-900/50 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-200 transition-all cursor-pointer shrink-0"
-          >
-            {isCollapsed ? <ChevronRight className="w-4 h-4" /> : <ChevronLeft className="w-4 h-4" />}
-          </button>
-        )}
+          {onToggleCollapse && (
+            <button
+              onClick={onToggleCollapse}
+              className="hidden md:flex w-7 h-7 rounded-lg items-center justify-center border border-zinc-900 hover:border-zinc-800 bg-zinc-950 hover:bg-zinc-900 text-zinc-400 hover:text-zinc-200 transition-all cursor-pointer shrink-0 shadow-sm"
+            >
+              {isCollapsed ? <ChevronRight className="w-3.5 h-3.5" /> : <ChevronLeft className="w-3.5 h-3.5" />}
+            </button>
+          )}
       </div>
 
       {/* Search Input */}
       {!isCollapsed ? (
-        <div className="px-6 py-4">
+        <div className="px-6 py-4 border-b border-zinc-900/40">
           <div className="relative group">
-            <Search className="absolute left-3.5 top-3 w-4 h-4 text-zinc-500 group-focus-within:text-teal-400 transition-colors" />
+            <Search className="absolute left-3.5 top-3 w-4 h-4 text-zinc-500 group-focus-within:text-teal-500 transition-colors" />
             <input
               type="text"
               placeholder="Search wiki pages..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full bg-zinc-900/50 hover:bg-zinc-900 border border-zinc-800 focus:border-zinc-700 focus:outline-none rounded-xl pl-10 pr-4 py-2.5 text-sm text-zinc-200 placeholder-zinc-500 transition-all font-medium"
+              className="w-full bg-zinc-900/30 hover:bg-zinc-900/50 border border-zinc-900 focus:border-zinc-800 focus:outline-none rounded-xl pl-10 pr-4 py-2.5 text-xs text-zinc-300 placeholder-zinc-500 transition-all font-medium"
             />
           </div>
         </div>
       ) : (
-        <div className="px-3 py-4 flex justify-center">
+        <div className="px-3 py-4 flex justify-center border-b border-zinc-900/40">
           <button 
             onClick={onToggleCollapse}
-            className="p-2.5 rounded-xl bg-zinc-900/40 border border-zinc-850 text-zinc-500 hover:text-zinc-300 transition-all cursor-pointer"
+            className="p-2 rounded-xl bg-zinc-900/20 border border-zinc-900 text-zinc-500 hover:text-zinc-300 transition-all cursor-pointer"
             title="Expand Sidebar"
           >
             <Search className="w-4 h-4" />
@@ -249,96 +299,165 @@ export default function Sidebar({ onLinkClick, isCollapsed = false, onToggleColl
       )}
 
       {/* Navigation List */}
-      <div className={`flex-1 overflow-y-auto overscroll-contain space-y-6 scrollbar-thin ${
-        isCollapsed ? "px-3 py-4" : "px-6 py-4"
+      <div className={`flex-1 overflow-y-auto overscroll-contain space-y-4 scrollbar-thin ${
+        isCollapsed ? "px-2 py-4" : "px-4 py-4"
       }`}>
         {filteredCategories.length > 0 ? (
-          filteredCategories.map((cat, idx) => (
-            <div key={idx} className="space-y-2">
-              {!isCollapsed ? (
-                <h2 className="text-[10px] font-bold text-zinc-500 uppercase tracking-widest px-3">
-                  {cat.name}
-                </h2>
-              ) : (
-                <div className="h-px bg-zinc-900 my-4" />
-              )}
-              <div className="space-y-1">
-                {cat.pages.map((page, pageIdx) => {
-                  const PageIcon = page.icon;
-                  const isActive = location.pathname === page.path;
+          filteredCategories.map((cat, idx) => {
+            const isGroupCollapsed = collapsedCategories[cat.name] && !searchQuery;
+            return (
+              <div key={idx} className="space-y-1">
+                {!isCollapsed ? (
+                  <button
+                    onClick={() => toggleCategory(cat.name)}
+                    className="w-full flex items-center justify-between text-[10px] font-bold text-zinc-550 uppercase tracking-widest px-3 py-1.5 hover:text-zinc-300 transition-colors cursor-pointer group/cat text-left"
+                  >
+                    <span>{cat.name}</span>
+                    <ChevronDown className={`w-3 h-3 text-zinc-650 group-hover/cat:text-zinc-400 transition-transform ${isGroupCollapsed ? "-rotate-90" : ""}`} />
+                  </button>
+                ) : (
+                  <div className="h-px bg-zinc-900/60 my-3" />
+                )}
 
-                  return (
-                    <Link
-                      key={pageIdx}
-                      to={page.path}
-                      onClick={onLinkClick}
-                      className={`group relative flex items-center rounded-xl text-sm font-medium transition-all ${
-                        isCollapsed ? "justify-center p-2.5" : "justify-between px-3.5 py-2.5"
-                      } ${
-                        isActive 
-                          ? "text-zinc-100 font-semibold" 
-                          : "text-zinc-400 hover:text-zinc-100"
-                      }`}
+                <AnimatePresence initial={false}>
+                  {(!isCollapsed && !isGroupCollapsed) && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: "auto", opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.2, ease: "easeInOut" }}
+                      className="overflow-hidden space-y-0.5"
                     >
-                      {/* Sliding active background indicator */}
-                      {isActive && (
-                        <motion.div
-                          layoutId="activeLinkPill"
-                          className="absolute inset-0 bg-zinc-900 border border-zinc-850 rounded-xl z-0"
-                          transition={{ type: "spring", stiffness: 380, damping: 30 }}
-                        />
-                      )}
+                      {cat.pages.map((page, pageIdx) => {
+                        const PageIcon = page.icon;
+                        const isActive = location.pathname === page.path;
 
-                      <div className={`flex items-center z-10 ${isCollapsed ? "justify-center" : "gap-3"}`}>
-                        <div className={`w-8 h-8 rounded-lg flex items-center justify-center border border-transparent transition-colors ${
-                          isActive 
-                            ? page.accentClass
-                            : `bg-zinc-900/40 text-zinc-500 border-zinc-800/40 ${page.hoverAccentClass}`
-                        }`}>
-                          <PageIcon className="w-4.5 h-4.5" />
-                        </div>
-                        {!isCollapsed && <span>{page.title}</span>}
-                      </div>
+                        return (
+                          <Link
+                            key={pageIdx}
+                            to={page.path}
+                            onClick={onLinkClick}
+                            className={`group relative flex items-center justify-between px-3.5 py-2 rounded-xl text-xs font-medium transition-all ${
+                              isActive 
+                                ? "text-zinc-150 font-semibold bg-zinc-900/40 border border-zinc-850" 
+                                : "text-zinc-450 hover:text-zinc-200 hover:bg-zinc-900/20 border border-transparent"
+                            }`}
+                          >
+                            <div className="flex items-center gap-2.5 z-10 min-w-0">
+                              <div className={`w-7 h-7 rounded-lg flex items-center justify-center border transition-all ${
+                                isActive 
+                                  ? page.accentClass
+                                  : `bg-zinc-900/30 text-zinc-500 border-zinc-900/40 ${page.hoverAccentClass}`
+                              }`}>
+                                <PageIcon className="w-3.5 h-3.5" />
+                              </div>
+                              <span className="truncate">{page.title}</span>
+                              {page.badge && (
+                                <span className={`px-1.5 py-0.5 text-[8px] font-black uppercase tracking-wider rounded shrink-0 border ${
+                                  page.badge === "New" 
+                                    ? "bg-violet-500/10 border-violet-500/20 text-violet-400" 
+                                    : "bg-teal-500/10 border-teal-500/20 text-teal-400"
+                                }`}>
+                                  {page.badge}
+                                </span>
+                              )}
+                            </div>
+                            <ChevronRight className={`w-3 h-3 text-zinc-650 transition-transform ${
+                              isActive ? "translate-x-0.5 opacity-100 text-zinc-400" : "opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"
+                            } z-10`} />
+                          </Link>
+                        );
+                      })}
+                    </motion.div>
+                  )}
+                </AnimatePresence>
 
-                      {!isCollapsed && (
-                        <ChevronRight className={`w-3.5 h-3.5 text-zinc-650 transition-transform ${
-                          isActive ? "translate-x-0.5 opacity-100 text-zinc-400" : "opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5"
-                        } z-10`} />
-                      )}
+                {/* Collapsed view icons list */}
+                {isCollapsed && (
+                  <div className="space-y-1">
+                    {cat.pages.map((page, pageIdx) => {
+                      const PageIcon = page.icon;
+                      const isActive = location.pathname === page.path;
 
-                      {/* CSS hover tooltip */}
-                      {isCollapsed && (
-                        <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-zinc-950 border border-zinc-850 text-zinc-200 text-xs font-bold rounded-lg shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 pointer-events-none transition-all duration-200 z-50">
-                          {page.title}
-                        </div>
-                      )}
-                    </Link>
-                  );
-                })}
+                      return (
+                        <Link
+                          key={pageIdx}
+                          to={page.path}
+                          onClick={onLinkClick}
+                          className={`group relative flex items-center justify-center p-2 rounded-xl transition-all ${
+                            isActive 
+                              ? "bg-zinc-900 border border-zinc-850" 
+                              : "hover:bg-zinc-900/40"
+                          }`}
+                        >
+                          <div className={`w-7 h-7 rounded-lg flex items-center justify-center border transition-all ${
+                            isActive 
+                              ? page.accentClass
+                              : `bg-zinc-900/30 text-zinc-500 border-zinc-900/40 ${page.hoverAccentClass}`
+                          }`}>
+                            <PageIcon className="w-3.5 h-3.5" />
+                          </div>
+                          
+                          {/* CSS hover tooltip */}
+                          <div className="absolute left-full ml-3 px-2.5 py-1.5 bg-zinc-950 border border-zinc-850 text-zinc-200 text-[10px] font-bold rounded-lg shadow-2xl whitespace-nowrap opacity-0 group-hover:opacity-100 translate-x-2 group-hover:translate-x-0 pointer-events-none transition-all duration-200 z-50 flex items-center gap-1.5">
+                            <span>{page.title}</span>
+                            {page.badge && (
+                              <span className={`px-1 py-0.2 bg-teal-500/10 border border-teal-500/25 text-teal-400 text-[7px] font-bold uppercase tracking-wider rounded`}>
+                                {page.badge}
+                              </span>
+                            )}
+                          </div>
+                        </Link>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
-            </div>
-          ))
+            );
+          })
         ) : (
           <div className="text-center py-8">
-            <p className="text-zinc-500 text-sm">
+            <p className="text-zinc-500 text-xs">
               {!isCollapsed ? "No pages found matching query." : "empty"}
             </p>
           </div>
         )}
       </div>
 
-      {/* Footer Info */}
+      {/* Profile Card Footer */}
       {!isCollapsed ? (
-        <div className="p-6 border-t border-zinc-900 bg-zinc-950">
-          <div className="flex items-center justify-between text-zinc-600 text-[10px] font-bold uppercase tracking-widest">
-            <span>v3.0.0 (React)</span>
-            <RefreshCw className="w-3.5 h-3.5 hover:rotate-180 transition-transform duration-500 cursor-pointer" />
+        <div className="px-5 py-4 border-t border-zinc-900 bg-zinc-950/40 flex items-center justify-between">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-400 to-indigo-400 p-0.5 shadow-md flex-shrink-0">
+              <div className="w-full h-full rounded-[10px] bg-zinc-950 flex items-center justify-center font-bold text-white text-[10px]">
+                SR
+              </div>
+            </div>
+            <div className="min-w-0">
+              <h4 className="text-zinc-200 text-xs font-bold truncate">Satyam Rana</h4>
+              <p className="text-zinc-500 text-[9px] uppercase tracking-wider font-semibold truncate">Software Engineer</p>
+            </div>
           </div>
         </div>
       ) : (
-        <div className="p-4 py-6 border-t border-zinc-900 bg-zinc-950 flex flex-col items-center gap-3">
-          <RefreshCw className="w-4 h-4 text-zinc-650 hover:text-zinc-400 hover:rotate-180 transition-transform duration-500 cursor-pointer" />
-          <span className="text-zinc-700 text-[9px] font-bold">v3</span>
+        <div className="py-4 border-t border-zinc-900 flex justify-center bg-zinc-950/40">
+          <div className="w-8 h-8 rounded-xl bg-gradient-to-tr from-teal-400 to-indigo-400 p-0.5 shadow-md flex-shrink-0" title="Satyam Rana">
+            <div className="w-full h-full rounded-[10px] bg-zinc-950 flex items-center justify-center font-bold text-white text-[10px]">
+              SR
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Global version info */}
+      {!isCollapsed ? (
+        <div className="p-4 border-t border-zinc-900 bg-zinc-950 text-center flex items-center justify-between text-zinc-650 text-[9px] font-bold uppercase tracking-widest">
+          <span>v3.0.0 (React)</span>
+          <RefreshCw className="w-3 h-3 hover:rotate-180 transition-transform duration-500 cursor-pointer" />
+        </div>
+      ) : (
+        <div className="p-3 border-t border-zinc-900 bg-zinc-950 flex flex-col items-center gap-2">
+          <RefreshCw className="w-3.5 h-3.5 text-zinc-650 hover:text-zinc-400 hover:rotate-180 transition-transform duration-500 cursor-pointer" />
         </div>
       )}
     </aside>
