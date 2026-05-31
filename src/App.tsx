@@ -26,6 +26,7 @@ const BackendApiTheory = lazy(() => import("./pages/BackendApiTheory"));
 const SE_Industry = lazy(() => import("./pages/SE_Industry"));
 const UberSystemDesign = lazy(() => import("./pages/UberSystemDesign"));
 const ZomatoSystemDesign = lazy(() => import("./pages/ZomatoSystemDesign"));
+const PythonCleanCode = lazy(() => import("./pages/PythonCleanCode"));
 
 
 // Loading fallback component
@@ -120,6 +121,7 @@ function AppContent() {
                 <Route path="/web/networking" element={<Networking />} />
                 <Route path="/web/backend-api-theory" element={<BackendApiTheory />} />
                 <Route path="/web/se-industry" element={<SE_Industry />} />
+                <Route path="/web/python-clean-code" element={<PythonCleanCode />} />
                 <Route path="/sql/joins" element={<SqlJoins />} />
                 <Route path="/system-design/uber" element={<UberSystemDesign />} />
                 <Route path="/system-design/zomato" element={<ZomatoSystemDesign />} />

@@ -158,6 +158,14 @@ export const categories: Category[] = [
         icon: Layers,
         accentClass: "text-teal-400 bg-teal-500/10 border-teal-500/20",
         hoverAccentClass: "group-hover:text-teal-400 group-hover:bg-teal-500/5"
+      },
+      {
+        title: "Python Clean Code",
+        path: "/web/python-clean-code",
+        icon: Terminal,
+        accentClass: "text-amber-400 bg-amber-500/10 border-amber-500/20",
+        hoverAccentClass: "group-hover:text-amber-400 group-hover:bg-amber-500/5",
+        badge: "New"
       }
     ]
   },
